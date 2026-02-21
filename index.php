@@ -267,18 +267,59 @@ if(count($testimonials) == 0) {
     </section>
 
     <!-- Brand Matrix (Sleek Auto Slider) -->
-    <section style="padding: 100px 0; background: white; overflow: hidden; border-top: 1px solid #eee;">
-        <div class="logo-track" style="display: flex; width: calc(300px * 12); animation: scrollBrands 40s linear infinite;">
+    <section style="padding: 100px 0; background: white; overflow: hidden; border-top: 1px solid #de02f1ff;">
+        <!-- <div class="logo-track" style="display: flex; width: calc(300px * 12); animation: scrollBrands 40s linear infinite;">
             <?php 
             $brands = ['APPLE', 'DELL', 'HP', 'ASUS', 'MSI', 'GIGABYTE', 'INTEL', 'AMD', 'NVIDIA', 'LENOVO', 'LOGITECH', 'LG'];
             foreach($brands as $brand):
             ?>
-            <div class="logo-item" style="width: 300px; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 900; color: #eee; letter-spacing: 5px;"><?php echo $brand; ?></div>
+            <div class="logo-item" style="width: 300px; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 900; color: #ffb007ff; letter-spacing: 5px;"><?php echo $brand; ?></div>
             <?php endforeach; ?>
             <?php foreach($brands as $brand): ?>
-            <div class="logo-item" style="width: 300px; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 900; color: #eee; letter-spacing: 5px;"><?php echo $brand; ?></div>
+            <div class="logo-item" style="width: 300px; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 900; color: #fa3b01ff; letter-spacing: 5px;"><?php echo $brand; ?></div>
             <?php endforeach; ?>
-        </div>
+           
+            
+        </div> -->
+        <div class="logo-slider">
+    <div class="logo-track">
+        <!-- First image -->
+        <img src="./assets/images/logo.png" alt="Brands">
+
+        <!-- Duplicate same image (Important for seamless loop) -->
+        <img src="./assets/images/logo.png" alt="Brands">
+    </div>
+</div><style>/* Container */
+.logo-slider {
+    width: 100%;
+    overflow: hidden;
+    background: #fff;
+    padding: 20px 0;
+}
+
+/* Track */
+.logo-track {
+    display: flex;
+    width: max-content;
+    animation: scroll 25s linear infinite;
+}
+
+/* Image */
+.logo-track img {
+    height: 120px; /* adjust */
+    flex-shrink: 0;
+}
+
+/* Animation */
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+</style>
     </section>
 </main>
 
