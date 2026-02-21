@@ -51,16 +51,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Update
         $stmt = $pdo->prepare("UPDATE products SET name=?, brand=?, category=?, price=?, offer_price=?, stock=?, main_image=?, specifications=?, description=?, `condition`=? WHERE id=?");
         $stmt->execute([$name, $brand, $category, $price, $offer_price, $stock, $image_path, $specifications, $description, $condition, $id]);
+        $product_id = $id;
     } else {
         // Insert
         $stmt = $pdo->prepare("INSERT INTO products (name, brand, category, price, offer_price, stock, main_image, specifications, description, `condition`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([$name, $brand, $category, $price, $offer_price, $stock, $image_path, $specifications, $description, $condition]);
+        $product_id = $pdo->lastInsertId();
     }
+
+    // Handle Extra Images
+    if (isset($_POST['extra_images']) && is_array($_POST['extra_images'])) {
+        // Clear existing extra images for edit mode (simple approach)
+        if ($id) {
+            $pdo->prepare("DELETE FROM product_images WHERE product_id = ?")->execute([$id]);
+        }
+        $img_stmt = $pdo->prepare("INSERT INTO product_images (product_id, image_url) VALUES (?, ?)");
+        foreach ($_POST['extra_images'] as $ext_url) {
+            if (!empty($ext_url)) {
+                $img_stmt->execute([$product_id, $ext_url]);
+            }
+        }
+    }
+
+    // Handle Sample Reviews (Only for NEW products usually, but we allow adding to existing too)
+    if (isset($_POST['reviews']) && is_array($_POST['reviews'])) {
+        $rev_stmt = $pdo->prepare("INSERT INTO reviews (product_id, reviewer_name, rating, review_text, is_admin_review) VALUES (?, ?, ?, ?, 1)");
+        foreach ($_POST['reviews'] as $rev) {
+            if (!empty($rev['name']) && !empty($rev['text'])) {
+                $rev_stmt->execute([$product_id, $rev['name'], $rev['rating'], $rev['text']]);
+            }
+        }
+    }
+
     redirect('admin/manage-products.php?msg=success');
 }
 
 $stmt = $pdo->query("SELECT * FROM products ORDER BY id DESC");
 $products = $stmt->fetchAll();
+
+// Map images to products
+foreach ($products as &$p) {
+    $img_stmt = $pdo->prepare("SELECT image_url FROM product_images WHERE product_id = ?");
+    $img_stmt->execute([$p['id']]);
+    $p['gallery'] = $img_stmt->fetchAll(PDO::FETCH_COLUMN);
+}
+unset($p);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -212,7 +247,7 @@ $products = $stmt->fetchAll();
                     <div id="image_preview_text" style="grid-column: 1/-1; font-size: 11px; color: var(--text-grey); margin-top: -10px;">Leave both empty to keep current image</div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 10px;">
                     <div>
                         <label style="font-size: 12px; font-weight: 600; color: var(--text-grey);">Description</label>
                         <textarea name="description" id="prod_desc" placeholder="General description..." rows="4"></textarea>
@@ -221,6 +256,30 @@ $products = $stmt->fetchAll();
                         <label style="font-size: 12px; font-weight: 600; color: var(--text-grey);">Specifications</label>
                         <textarea name="specifications" id="prod_specs" placeholder="Technical specs (one per line)..." rows="4"></textarea>
                     </div>
+                </div>
+
+                <!-- Extra Images Section -->
+                <div style="margin-bottom: 25px;">
+                    <label style="font-size: 12px; font-weight: 600; color: var(--text-grey); display: block; margin-bottom: 10px;">Gallery Images (URLs)</label>
+                    <div id="extra_images_container">
+                        <!-- Dynamic inputs here -->
+                    </div>
+                    <button type="button" onclick="addExtraImageInput()" class="btn btn-outline" style="padding: 6px 14px; font-size: 12px; margin-top: 5px;">
+                        <i class="fas fa-plus"></i> Add Gallery Image
+                    </button>
+                </div>
+
+                <!-- Sample Reviews Section -->
+                <div style="margin-bottom: 25px; padding: 20px; background: #fafafa; border-radius: 12px; border: 1px solid #efefef;">
+                    <label style="font-size: 13px; font-weight: 700; color: var(--text-dark); display: block; margin-bottom: 15px;">
+                        <i class="fas fa-star" style="color: #ffb400;"></i> Initial Reviews (Optional)
+                    </label>
+                    <div id="reviews_container">
+                        <!-- Dynamic review blocks here -->
+                    </div>
+                    <button type="button" onclick="addReviewBlock()" class="btn btn-outline" style="padding: 8px 16px; font-size: 12px; border-style: dashed; width: 100%;">
+                        <i class="fas fa-plus-circle"></i> ➕ Add Another Review
+                    </button>
                 </div>
 
                 <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 10px;">
@@ -262,6 +321,11 @@ $products = $stmt->fetchAll();
         document.getElementById('image_preview_text').style.display = 'block';
         document.getElementById('productModal').style.display = 'flex';
         
+        // Populate Gallery
+        if (p.gallery && p.gallery.length > 0) {
+            p.gallery.forEach(url => addExtraImageInput(url));
+        }
+
         restoreDraft(); // Check if there's a draft for this specific ID
         captureInitialValues();
     }
@@ -280,6 +344,45 @@ $products = $stmt->fetchAll();
         document.getElementById('prod_specs').value = '';
         document.getElementById('prod_img_url').value = '';
         document.getElementById('image_preview_text').style.display = 'none';
+        
+        // Clear dynamic sections
+        document.getElementById('extra_images_container').innerHTML = '';
+        document.getElementById('reviews_container').innerHTML = '';
+    }
+
+    function addExtraImageInput(val = '') {
+        const container = document.getElementById('extra_images_container');
+        const div = document.createElement('div');
+        div.style = 'display: flex; gap: 10px; margin-bottom: 8px;';
+        div.innerHTML = `
+            <input type="url" name="extra_images[]" value="${val}" placeholder="https://additional-image-url.com/..." style="margin-bottom:0; flex:1;">
+            <button type="button" onclick="this.parentElement.remove()" class="btn btn-outline" style="padding: 12px; color: #ff3b30; border-color: #ffbaba;"><i class="fas fa-times"></i></button>
+        `;
+        container.appendChild(div);
+    }
+
+    let reviewIdx = 0;
+    function addReviewBlock() {
+        const container = document.getElementById('reviews_container');
+        const div = document.createElement('div');
+        div.className = 'review-block';
+        div.style = 'background: white; border: 1px solid #eee; padding: 15px; border-radius: 10px; margin-bottom: 15px; position: relative;';
+        div.innerHTML = `
+            <button type="button" onclick="this.parentElement.remove()" style="position: absolute; top: 10px; right: 10px; background: none; border: none; color: #ff3b30; cursor: pointer;"><i class="fas fa-trash"></i></button>
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-bottom: 10px;">
+                <input type="text" name="reviews[${reviewIdx}][name]" placeholder="Reviewer Name" style="margin-bottom:0;">
+                <select name="reviews[${reviewIdx}][rating]" style="margin-bottom:0;">
+                    <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+                    <option value="4">⭐⭐⭐⭐ (4)</option>
+                    <option value="3">⭐⭐⭐ (3)</option>
+                    <option value="2">⭐⭐ (2)</option>
+                    <option value="1">⭐ (1)</option>
+                </select>
+            </div>
+            <textarea name="reviews[${reviewIdx}][text]" placeholder="Review text content..." rows="2" style="margin-bottom:0;"></textarea>
+        `;
+        container.appendChild(div);
+        reviewIdx++;
     }
 
     async function closeModal(confirmNeeded = false) { 
