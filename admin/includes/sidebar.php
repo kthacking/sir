@@ -47,3 +47,43 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </a>
     </div>
 </aside>
+
+<!-- Global Custom Confirmation Modal -->
+<div id="customConfirmModal">
+    <div class="confirm-card">
+        <div class="confirm-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <div class="confirm-title" id="confirmTitle">Unsaved Changes</div>
+        <div class="confirm-text" id="confirmMessage">You have unsaved changes. Do you want to discard them?</div>
+        <div class="confirm-actions">
+            <button class="confirm-btn-cancel" onclick="handleConfirmResponse(false)">Stay on Page</button>
+            <button class="confirm-btn-danger" onclick="handleConfirmResponse(true)">Discard Changes</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let confirmResolver = null;
+
+    function customConfirm(title, message, btnCancel, btnDanger) {
+        return new Promise((resolve) => {
+            document.getElementById('confirmTitle').innerText = title || 'Unsaved Changes';
+            document.getElementById('confirmMessage').innerText = message || 'You have unsaved changes. Do you want to discard them?';
+            
+            const cancelBtn = document.querySelector('.confirm-btn-cancel');
+            const dangerBtn = document.querySelector('.confirm-btn-danger');
+            
+            if (btnCancel) cancelBtn.innerText = btnCancel;
+            if (btnDanger) dangerBtn.innerText = btnDanger;
+            
+            document.getElementById('customConfirmModal').style.display = 'flex';
+            confirmResolver = resolve;
+        });
+    }
+
+    function handleConfirmResponse(response) {
+        document.getElementById('customConfirmModal').style.display = 'none';
+        if (confirmResolver) confirmResolver(response);
+    }
+</script>

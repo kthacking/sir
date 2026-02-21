@@ -282,9 +282,15 @@ $products = $stmt->fetchAll();
         document.getElementById('image_preview_text').style.display = 'none';
     }
 
-    function closeModal(confirmNeeded = false) { 
+    async function closeModal(confirmNeeded = false) { 
         if (confirmNeeded && isFormDirty()) {
-            if (!confirm("You have unsaved changes. Do you want to discard them?")) return;
+            const confirmed = await customConfirm(
+                'Discard Product Changes?',
+                'You have unsaved details for this product. If you leave now, these changes will be lost.',
+                'Keep Editing',
+                'Discard'
+            );
+            if (!confirmed) return;
         }
         document.getElementById('productModal').style.display = 'none'; 
         clearDraft();

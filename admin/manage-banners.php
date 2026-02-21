@@ -225,9 +225,15 @@ $banners = $stmt->fetchAll();
         document.getElementById('banner_active').checked = true;
     }
 
-    function closeModal(confirmNeeded = false) { 
+    async function closeModal(confirmNeeded = false) { 
         if (confirmNeeded && isFormDirty()) {
-            if (!confirm("You have unsaved changes. Do you want to discard them?")) return;
+            const confirmed = await customConfirm(
+                'Unsaved Changes',
+                'You have unfinished configuration. Are you sure you want to discard these updates?',
+                'Back to Editing',
+                'Discard Changes'
+            );
+            if (!confirmed) return;
         }
         document.getElementById('bannerModal').style.display = 'none'; 
         clearDraft();
