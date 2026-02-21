@@ -1,0 +1,76 @@
+<?php 
+include_once 'includes/config.php';
+include 'includes/header.php'; 
+
+$category_name = "Laptops";
+?>
+
+<main style="padding-top: 100px;">
+    <section class="section-padding">
+        <div style="text-align: center; margin-bottom: 60px;">
+            <h1 class="animate-fade-up"><?php echo $category_name; ?></h1>
+            <p class="animate-fade-up">Refurbished, Demo, and New high-end portables.</p>
+        </div>
+
+        <div class="grid">
+            <?php
+            $stmt = $pdo->prepare("SELECT * FROM products WHERE category = ? ORDER BY id DESC");
+            $stmt->execute(['Laptops']);
+            $products = $stmt->fetchAll();
+
+            if (count($products) > 0):
+                foreach ($products as $p):
+                    $is_out_of_stock = ($p['stock'] <= 0);
+            ?>
+                <div class="glass-card animate-fade-up" style="display: flex; flex-direction: column;">
+                    <div style="height: 250px; background: #fff; border-radius: 12px; margin-bottom: 20px; text-align: center; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;">
+                        <?php 
+                        $img_src = $p['main_image'];
+                        if (empty($img_src)) {
+                            $img_src = 'https://images.unsplash.com/photo-1517336714731-489689fd1ca4';
+                        }
+                        ?>
+                        <img src="<?php echo htmlspecialchars($img_src); ?>" 
+                             alt="<?php echo htmlspecialchars($p['name']); ?>" 
+                             style="max-width: 90%; max-height: 90%; object-fit: contain;">
+                        
+                        <?php if ($is_out_of_stock): ?>
+                            <div style="position: absolute; top: 10px; right: 10px; background: #ff3b30; color: white; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700;">OUT OF STOCK</div>
+                        <?php endif; ?>
+                    </div>
+                    
+                    <div style="flex: 1;">
+                        <span style="font-size: 11px; color: var(--text-grey); font-weight: 600; text-transform: uppercase;">
+                            <?php echo htmlspecialchars($p['brand']); ?> | <?php echo htmlspecialchars($p['condition']); ?>
+                        </span>
+                        <h3 style="margin: 5px 0; font-size: 18px; line-height: 1.4;"><?php echo htmlspecialchars($p['name']); ?></h3>
+                        <p style="font-size: 13px; color: var(--text-grey); margin-bottom: 20px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                            <?php echo htmlspecialchars($p['description']); ?>
+                        </p>
+                    </div>
+
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-top: auto;">
+                        <div>
+                            <div style="font-weight: 700; font-size: 20px;">₹<?php echo number_format($p['offer_price']); ?></div>
+                            <?php if ($p['price'] > $p['offer_price']): ?>
+                                <div style="font-size: 12px; text-decoration: line-through; color: var(--text-grey);">₹<?php echo number_format($p['price']); ?></div>
+                            <?php endif; ?>
+                        </div>
+                        <a href="product-details.php?id=<?php echo $p['id']; ?>" class="btn btn-primary" style="padding: 10px 20px; font-size: 14px;">View Details</a>
+                    </div>
+                </div>
+            <?php 
+                endforeach;
+            else:
+            ?>
+                <div style="grid-column: 1/-1; text-align: center; padding: 100px 20px;">
+                    <i class="fas fa-search-minus" style="font-size: 60px; color: #eee; margin-bottom: 20px;"></i>
+                    <h2>No Products Available</h2>
+                    <p style="color: var(--text-grey); margin-top: 10px;">Check back later for the latest laptops.</p>
+                    <a href="index.php" class="btn btn-outline" style="margin-top: 25px;">Back to Home</a>
+                </div>
+            <?php endif; ?>
+        </div>
+    </section>
+</main>
+<?php include 'includes/footer.php'; ?>
