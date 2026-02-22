@@ -58,9 +58,8 @@ $db_brands = $brand_stmt->fetchAll();
                             <i class="fas fa-chevron-down"></i>
                         </div>
                         <div class="filter-content scroll-mini">
-                            <?php 
-                            $target_cats = ['Workstations', 'Laptops', 'Desktops', 'Components', 'Printers & Peripherals', 'Networking'];
-                            foreach($target_cats as $cat): 
+                            <?php foreach($db_categories as $cat_row): 
+                                $cat = $cat_row['category'];
                             ?>
                             <label class="filter-label">
                                 <input type="checkbox" name="category" value="<?php echo $cat; ?>" onchange="filterProducts()">
@@ -92,9 +91,8 @@ $db_brands = $brand_stmt->fetchAll();
                             <i class="fas fa-chevron-down"></i>
                         </div>
                         <div class="filter-content">
-                            <?php 
-                            $target_brands = ['Dell', 'HP', 'Lenovo', 'ASUS', 'MSI', 'Logitech', 'Apple'];
-                            foreach($target_brands as $brand): 
+                            <?php foreach($db_brands as $brand_row): 
+                                $brand = $brand_row['brand'];
                             ?>
                             <label class="filter-label">
                                 <input type="checkbox" name="brand" value="<?php echo $brand; ?>" onchange="filterProducts()">
@@ -316,35 +314,35 @@ $db_brands = $brand_stmt->fetchAll();
 
     .lean-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 24px;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
         width: 100%;
     }
 
     /* Premium App-Style Product Card */
     .product-card-premium {
         background: #ffffff;
-        border-radius: 22px;
-        padding: 20px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.04);
-        transition: all 0.3s ease;
+        border-radius: 20px;
+        padding: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         height: 100%;
         position: relative;
-        border: 1px solid #f3f4f6;
+        border: 1px solid #f1f1f4;
     }
 
     .product-card-premium:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.06);
     }
 
     .premium-img-container {
-        height: 200px;
+        height: 180px;
         width: 100%;
-        border-radius: 18px;
+        border-radius: 16px;
         overflow: hidden;
         margin-bottom: 0;
         background: #f9fafb;
@@ -352,7 +350,7 @@ $db_brands = $brand_stmt->fetchAll();
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 15px;
+        padding: 12px;
     }
 
     .premium-img-container img {
@@ -376,26 +374,29 @@ $db_brands = $brand_stmt->fetchAll();
     }
 
     .premium-btn {
-        background: var(--primary, #0071e3);
+        background: #1d1d1f;
         color: white;
-        height: 38px;
+        height: 34px;
         border-radius: 10px;
-        padding: 0 16px;
-        font-size: 13px;
+        padding: 0 20px;
+        font-size: 11px;
         font-weight: 600;
         border: none;
         cursor: pointer;
-        transition: all 0.2s;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         text-decoration: none;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         white-space: nowrap;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
     }
 
     .premium-btn:hover {
-        background: #1d4ed8;
-        transform: scale(1.02);
+        background: var(--primary, #0071e3);
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(0, 113, 227, 0.2);
     }
 
     .lean-btn-primary:hover { background: #1d4ed8; }

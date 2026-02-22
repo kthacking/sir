@@ -94,29 +94,29 @@ if (count($products) > 0) {
         <div class="product-card-premium fade-in-up">
             <div>
                 <div class="premium-img-container">
-                    ' . ($discount > 0 ? '<div style="position: absolute; top: 12px; left: 12px; background: #fee2e2; color: #ef4444; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; z-index: 2;">-' . $discount . '%</div>' : '') . '
-                    <button style="position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.8); border: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #9ca3af; cursor: pointer; z-index: 2; backdrop-filter: blur(4px);"><i class="far fa-heart"></i></button>
+                    ' . ($discount > 0 ? '<div style="position: absolute; top: 12px; left: 12px; background: #dcfce7; color: #16a34a; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; z-index: 2;">-' . $discount . '%</div>' : '') . '
+                    <button style="position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.9); border: none; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #9ca3af; cursor: pointer; z-index: 2; transition: all 0.3s ease;"><i class="far fa-heart"></i></button>
                     <a href="product-details.php?id='.$p['id'].'">
                         <img src="' . htmlspecialchars($p['main_image']) . '" alt="' . htmlspecialchars($p['name']) . '">
                     </a>
                 </div>
                 
-                <h3 style="font-size: 18px; font-weight: 600; color: #111827; margin-top: 16px; margin-bottom: 6px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 44px; line-height: 1.2;">' . htmlspecialchars($p['name']) . '</h3>
-                <p style="font-size: 14px; color: #6b7280; line-height: 1.5; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 42px;">' . htmlspecialchars($short_desc) . '</p>
+                <h3 style="font-size: 15px; font-weight: 600; color: #1d1d1f; margin-top: 14px; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 36px; line-height: 1.2;">' . htmlspecialchars($p['name']) . '</h3>
+                <p style="font-size: 12px; color: #86868b; line-height: 1.4; margin-bottom: 12px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 34px;">' . htmlspecialchars($short_desc) . '</p>
             </div>
             
             <div>
-                <div style="margin-bottom: 16px;">
-                    <span style="font-size: 20px; font-weight: 700; color: #111827;">₹' . number_format($p['offer_price']) . '</span>
-                    ' . ($p['price'] > $p['offer_price'] ? '<span style="font-size: 13px; text-decoration: line-through; color: #9ca3af; margin-left: 8px;">₹' . number_format($p['price']) . '</span>' : '') . '
+                <div style="margin-bottom: 12px;">
+                    <span style="font-size: 18px; font-weight: 700; color: #1d1d1f;">₹' . number_format($p['offer_price']) . '</span>
+                    ' . ($p['price'] > $p['offer_price'] ? '<span style="font-size: 11px; text-decoration: line-through; color: #86868b; margin-left: 6px;">₹' . number_format($p['price']) . '</span>' : '') . '
                 </div>
                 
-                <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
                     <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-                        <span class="premium-tag">' . htmlspecialchars($p['category']) . '</span>
+                        <span class="premium-tag" style="background: #f5f5f7; color: #1d1d1f; padding: 4px 10px; font-size: 10px; border-radius: 6px;">' . htmlspecialchars($p['category']) . '</span>
                     </div>
                     <a href="product-details.php?id=' . $p['id'] . '" class="premium-btn">
-                        View Product
+                        View
                     </a>
                 </div>
             </div>

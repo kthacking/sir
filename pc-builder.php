@@ -429,7 +429,7 @@ include_once 'includes/db_connect.php';
 <main>
     <!-- 1️⃣ HERO SECTION -->
     <section class="builder-hero">
-        <div class="container">
+        <div class="container" style="max-width: 1300px;">
             <div class="badge-pro mb-3">Professional Rigs</div>
             <h1>CUSTOM PC RIG BUILDER</h1>
             <p>Craft your perfect performance machine with precision components or choose the best curated setups.</p>
@@ -441,7 +441,7 @@ include_once 'includes/db_connect.php';
     </section>
 
     <!-- 2️⃣ BUILD MODE SELECTOR -->
-    <section class="mode-selector container">
+    <section class="mode-selector container" style="max-width: 1300px;">
         <div class="row g-4">
             <div class="col-md-4">
                 <div class="mode-card active" id="mode-custom" onclick="switchMode('custom')">
@@ -467,7 +467,7 @@ include_once 'includes/db_connect.php';
         </div>
     </section>
 
-    <div class="container pb-5">
+    <div class="container pb-5" style="max-width: 1300px;">
         
         <!-- 3️⃣ CUSTOM BUILD SECTION -->
         <section id="section-custom" class="builder-section active">
@@ -557,17 +557,6 @@ include_once 'includes/db_connect.php';
 
     </div>
 </main>
-
-<!-- Detailed View Modal -->
-<div class="modal fade" id="productModal" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content" style="border-radius: 24px; border: none; overflow: hidden;">
-            <div class="modal-body p-0" id="modal-content">
-                <!-- Content loaded dynamically -->
-            </div>
-        </div>
-    </div>
-</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -690,8 +679,7 @@ include_once 'includes/db_connect.php';
         grid.innerHTML = '';
         loader.classList.remove('d-none');
 
-        // Note: For demo, we are fetching "Components" category and filtering clientside
-        // In real app, we use AJAX to fetch specific category/step items
+        // Fetch components
         fetch('fetch_products.php', {
             method: 'POST',
             body: JSON.stringify({ categories: ['Components'], limit: 50 })
@@ -699,11 +687,11 @@ include_once 'includes/db_connect.php';
         .then(res => res.json())
         .then(data => {
             loader.classList.add('d-none');
-            // Mock filtering based on step name as keywords for demo
-            let filtered = JSON.parse(JSON.stringify(mockProducts(stepId))); 
+            // Simplified logic for demo
+            let filtered = mockProducts(stepId); 
             
             grid.innerHTML = filtered.map(p => `
-                <div class="col-md-6 col-xl-4">
+                <div class="col-md-6">
                     <div class="component-card">
                         <div class="comp-img">
                             <img src="${p.main_image}" alt="${p.name}">
@@ -712,7 +700,7 @@ include_once 'includes/db_connect.php';
                         <div class="comp-specs">${p.specifications.substring(0, 60)}...</div>
                         <div class="comp-bottom">
                             <div class="comp-price">₹${p.offer_price.toLocaleString()}</div>
-                            <button class="btn btn-sm btn-primary" onclick="selectComponent('${stepId}', ${JSON.stringify(p).replace(/"/g, '&quot;')})">Select</button>
+                            <button class="btn btn-sm btn-primary" onclick='selectComponent("${stepId}", ${JSON.stringify(p).replace(/'/g, "&apos;")})'>Select</button>
                         </div>
                     </div>
                 </div>
@@ -720,31 +708,23 @@ include_once 'includes/db_connect.php';
         });
     }
 
-    // Since our database is empty/generic, we generate context-appropriate mock items for the builder
     function mockProducts(step) {
         const base = { category: 'Components', specifications: 'High quality performance component' };
         if (step === 'cpu') return [
-            { id: 101, name: 'Intel Core i9-14900K', offer_price: 58000, main_image: 'https://images.unsplash.com/photo-1591488320449-011701bb6704', ...base, wattage: 125, socket: 'LGA1700' },
-            { id: 102, name: 'AMD Ryzen 7 7800X3D', offer_price: 42000, main_image: 'https://images.unsplash.com/photo-1591488320449-011701bb6704', ...base, wattage: 120, socket: 'AM5' },
-            { id: 103, name: 'Intel Core i5-13600K', offer_price: 29500, main_image: 'https://images.unsplash.com/photo-1591488320449-011701bb6704', ...base, wattage: 125, socket: 'LGA1700' }
+            { id: 101, name: 'Intel Core i9-14900K', offer_price: 58000, main_image: 'https://images.unsplash.com/photo-1591488320449-011701bb6704', ...base, wattage: 125 },
+            { id: 102, name: 'AMD Ryzen 7 7800X3D', offer_price: 42000, main_image: 'https://images.unsplash.com/photo-1591488320449-011701bb6704', ...base, wattage: 120 }
         ];
         if (step === 'mobo') return [
-            { id: 201, name: 'ASUS ROG Z790-E WiFi', offer_price: 48000, main_image: 'https://images.unsplash.com/photo-1587202372775-e229f170b998', ...base, socket: 'LGA1700' },
-            { id: 202, name: 'MSI PRO B650-P WiFi', offer_price: 22500, main_image: 'https://images.unsplash.com/photo-1587202372775-e229f170b998', ...base, socket: 'AM5' }
+            { id: 201, name: 'ASUS ROG Z790-E WiFi', offer_price: 48000, main_image: 'https://images.unsplash.com/photo-1587202372775-e229f170b998', ...base }
         ];
         if (step === 'ram') return [
             { id: 301, name: 'Corsair Vengeance 32GB DDR5', offer_price: 12500, main_image: 'https://images.unsplash.com/photo-1591485121415-397c726354b6', ...base }
         ];
         if (step === 'gpu') return [
-            { id: 401, name: 'NVIDIA RTX 4080 Founders', offer_price: 115000, main_image: 'https://images.unsplash.com/photo-1591488320449-011701bb6704', ...base, wattage: 320 },
-            { id: 402, name: 'ASUS TUF RTX 4070 Ti', offer_price: 78000, main_image: 'https://images.unsplash.com/photo-1591488320449-011701bb6704', ...base, wattage: 285 }
-        ];
-        if (step === 'psu') return [
-            { id: 501, name: 'Corsair RM850x Gold', offer_price: 11500, main_image: 'https://images.unsplash.com/photo-1591488320449-011701bb6704', ...base, wattage: 850 }
+            { id: 401, name: 'NVIDIA RTX 4080 Founders', offer_price: 115000, main_image: 'https://images.unsplash.com/photo-1591488320449-011701bb6704', ...base, wattage: 320 }
         ];
         return [
-            { id: 999, name: 'NZXT H5 Flow White', offer_price: 9500, main_image: 'https://images.unsplash.com/photo-1591488320449-011701bb6704', ...base },
-            { id: 998, name: 'WD Black 1TB NVMe', offer_price: 8200, main_image: 'https://images.unsplash.com/photo-1591488320449-011701bb6704', ...base }
+            { id: 999, name: 'Default Component', offer_price: 10000, main_image: 'https://images.unsplash.com/photo-1591488320449-011701bb6704', ...base }
         ];
     }
 
@@ -753,7 +733,6 @@ include_once 'includes/db_connect.php';
         updateSummary();
         renderSteps();
         
-        // Auto go to next step
         if (currentStepIndex < steps.length - 1) {
             goToStep(currentStepIndex + 1);
         }
@@ -782,9 +761,8 @@ include_once 'includes/db_connect.php';
         });
 
         document.getElementById('total-price').innerText = '₹' + total.toLocaleString();
-        document.getElementById('est-power').innerText = '~' + (power + 50) + 'W'; // 50W baseline for fans/misc
+        document.getElementById('est-power').innerText = '~' + (power + 50) + 'W';
         
-        // Performance Tier calculation
         let tier = 'Entry';
         let barWidth = 25;
         if (total > 80000) { tier = 'Mid-Range'; barWidth = 50; }
@@ -813,7 +791,7 @@ include_once 'includes/db_connect.php';
     function renderPrebuilts() {
         const grid = document.getElementById('prebuilt-grid');
         grid.innerHTML = prebuilts.map(p => `
-            <div class="col-md-6 col-xl-4">
+            <div class="col-md-4">
                 <div class="combo-card">
                     <div class="combo-img">
                         <img src="${p.img}" alt="${p.name}">
@@ -837,7 +815,7 @@ include_once 'includes/db_connect.php';
     function renderFullSetups() {
         const grid = document.getElementById('fullsetup-grid');
         grid.innerHTML = fullsetups.map(p => `
-             <div class="col-md-8 mx-auto">
+             <div class="col-md-10 mx-auto">
                 <div class="glass-card-pro p-4 d-flex gap-4 align-items-center">
                     <img src="${p.img}" style="width: 250px; border-radius: 20px;">
                     <div class="flex-grow-1">
@@ -862,16 +840,14 @@ include_once 'includes/db_connect.php';
     }
 
     function saveBuild() {
-        alert('Build saved to your profile! You can access it anytime.');
+        alert('Build saved to your profile!');
     }
 
     function buyBundle(id) {
-        alert('Bundle added to bag! Redirecting to checkout...');
         window.location.href = 'cart.php';
     }
 
     function addToCart() {
-        alert('Custom build added to bag! Our engineers will assemble and test it.');
         window.location.href = 'cart.php';
     }
 </script>
