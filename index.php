@@ -27,7 +27,7 @@ if(count($testimonials) == 0) {
     <!-- Flash Deal Ticker moved to Header -->
     <!-- Section 1: Hero Banner Carousel (Wider Layout) -->
     <section class="banner-section" style="padding-top: 100px; background: #fafafaff;">
-        <div class="container-wide">
+        <div id="tbanner" class="container-wide">
             <div class="banner-container" style="position: relative; height: 650px; overflow: hidden; border-radius: 0px 0px 40px 40px; background: #000; box-shadow: 0 40px 100px rgba(0,0,0,0.15);">
                 <?php if (count($banners) > 0): ?>
                     <?php foreach ($banners as $index => $b): ?>
@@ -62,6 +62,33 @@ if(count($testimonials) == 0) {
                 <?php endif; ?>
             </div>
         </div>
+      <script>
+window.addEventListener("load", function() {
+    setTimeout(function() {
+        document.getElementById("tbanner").classList.add("expand");
+    }, 200);
+});
+</script>
+<style>
+#tbanner {
+    max-width: 40px;
+    margin: 0 auto;
+    overflow: hidden;
+
+    /* Smooth top reveal */
+    clip-path: inset(0 0 100% 0);
+
+    transition:
+        clip-path 1s cubic-bezier(0.22, 1, 0.36, 1),
+        max-width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+#tbanner.expand {
+    clip-path: inset(0 0 0 0);
+    max-width: 1400px;
+}
+</style>
     </section>
 
     <!-- Section 2: 🔥 Featured Categories Grid -->
@@ -102,70 +129,7 @@ if(count($testimonials) == 0) {
         </div>
     </section>
 
-    <!-- Section 3: 🏆 Why Choose Us Section (Pro Branding Fixed) -->
-    <section class="section-padding" style="background: #000; color: white;">
-        <div class="container-wide">
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;">
-                <div style="border-right: 1px solid rgba(255,255,255,0.1); padding: 50px;" class="fade-in-up">
-                    <i class="fas fa-handshake" style="font-size: 36px; color: var(--primary); margin-bottom: 25px;"></i>
-                    <h4 style="font-size: 18px; margin-bottom: 12px; color: white; font-weight: 700;">Authorized Partner</h4>
-                    <p style="font-size: 14px; color: #a1a1a6; line-height: 1.5;">Direct partner with HP, Dell, and Apple.</p>
-                </div>
-                <div style="border-right: 1px solid rgba(255,255,255,0.1); padding: 50px;" class="fade-in-up" style="transition-delay: 0.1s;">
-                    <i class="fas fa-shield-check" style="font-size: 36px; color: var(--primary); margin-bottom: 25px;"></i>
-                    <h4 style="font-size: 18px; margin-bottom: 12px; color: white; font-weight: 700;">100% Genuine</h4>
-                    <p style="font-size: 14px; color: #a1a1a6; line-height: 1.5;">Authentic hardware with official warranty.</p>
-                </div>
-                <div style="border-right: 1px solid rgba(255,255,255,0.1); padding: 50px;" class="fade-in-up" style="transition-delay: 0.2s;">
-                    <i class="fas fa-microchip" style="font-size: 36px; color: var(--primary); margin-bottom: 25px;"></i>
-                    <h4 style="font-size: 18px; margin-bottom: 12px; color: white; font-weight: 700;">Expert Integration</h4>
-                    <p style="font-size: 14px; color: #a1a1a6; line-height: 1.5;">Certified engineers build your rigs.</p>
-                </div>
-                <div style="padding: 50px;" class="fade-in-up" style="transition-delay: 0.3s;">
-                    <i class="fas fa-award" style="font-size: 36px; color: var(--primary); margin-bottom: 25px;"></i>
-                    <h4 style="font-size: 18px; margin-bottom: 12px; color: white; font-weight: 700;">Best Quotes</h4>
-                    <p style="font-size: 14px; color: #a1a1a6; line-height: 1.5;">Unbeatable prices for bulk and pro-builds.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- New: FPS Performance Section -->
-    <section class="section-padding" style="background: white;">
-        <div class="container-wide">
-            <div style="display: flex; gap: 80px; align-items: center;">
-                <div style="flex: 1;" class="fade-in-up">
-                    <div class="badge-pro">Unmatched Power</div>
-                    <h2 class="gradient-text">Pro Level Performance</h2>
-                    <p style="margin-bottom: 40px;">Our builds are stress-tested with the most demanding workloads to ensure you stay at the top of your game.</p>
-                    
-                    <div style="background: var(--bg-light); padding: 30px; border-radius: 24px; margin-bottom: 20px;">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                            <span style="font-weight: 600;">Cyberpunk 2077 (4K Ultra RT)</span>
-                            <span style="color: var(--primary); font-weight: 700;">120 FPS</span>
-                        </div>
-                        <div style="height: 6px; background: #ddd; border-radius: 10px; overflow: hidden;">
-                            <div style="width: 95%; height: 100%; background: var(--primary);"></div>
-                        </div>
-                    </div>
-                    <div style="background: var(--bg-light); padding: 30px; border-radius: 24px; margin-bottom: 20px;">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                            <span style="font-weight: 600;">Adobe Premiere Rendering</span>
-                            <span style="color: var(--primary); font-weight: 700;">2x Faster</span>
-                        </div>
-                        <div style="height: 6px; background: #ddd; border-radius: 10px; overflow: hidden;">
-                            <div style="width: 85%; height: 100%; background: var(--primary);"></div>
-                        </div>
-                    </div>
-                </div>
-                <div style="flex: 1;" class="fade-in-up">
-                    <img src="https://i.pinimg.com/1200x/4b/81/55/4b8155675b91ffa97d2bc99e4f969834.jpg" style="width: 100%; border-radius: 32px; box-shadow: var(--shadow-heavy);">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section 4: 💻 Latest Products (Dynamic From DB) -->
+       <!-- Section 4: 💻 Latest Products (Dynamic From DB) -->
     <section class="section-padding bg-light">
         <div class="container-wide">
             <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 80px;">
@@ -295,6 +259,43 @@ if(count($testimonials) == 0) {
         </div>
     </section>
 
+
+    <!-- New: FPS Performance Section -->
+    <section class="section-padding" style="background: white;">
+        <div class="container-wide">
+            <div style="display: flex; gap: 80px; align-items: center;">
+                <div style="flex: 1;" class="fade-in-up">
+                    <div class="badge-pro">Unmatched Power</div>
+                    <h2 class="gradient-text">Pro Level Performance</h2>
+                    <p style="margin-bottom: 40px;">Our builds are stress-tested with the most demanding workloads to ensure you stay at the top of your game.</p>
+                    
+                    <div style="background: var(--bg-light); padding: 30px; border-radius: 24px; margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span style="font-weight: 600;">Cyberpunk 2077 (4K Ultra RT)</span>
+                            <span style="color: var(--primary); font-weight: 700;">120 FPS</span>
+                        </div>
+                        <div style="height: 6px; background: #ddd; border-radius: 10px; overflow: hidden;">
+                            <div style="width: 95%; height: 100%; background: var(--primary);"></div>
+                        </div>
+                    </div>
+                    <div style="background: var(--bg-light); padding: 30px; border-radius: 24px; margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <span style="font-weight: 600;">Adobe Premiere Rendering</span>
+                            <span style="color: var(--primary); font-weight: 700;">2x Faster</span>
+                        </div>
+                        <div style="height: 6px; background: #ddd; border-radius: 10px; overflow: hidden;">
+                            <div style="width: 85%; height: 100%; background: var(--primary);"></div>
+                        </div>
+                    </div>
+                </div>
+                <div style="flex: 1;" class="fade-in-up">
+                    <img src="https://i.pinimg.com/1200x/4b/81/55/4b8155675b91ffa97d2bc99e4f969834.jpg" style="width: 100%; border-radius: 32px; box-shadow: var(--shadow-heavy);">
+                </div>
+            </div>
+        </div>
+    </section>
+
+
     <!-- Section 5: 🎮 Custom PC Builder Section (Wide Pro) -->
     <section class="section-padding" style="background: white;">
         <div class="container-wide">
@@ -421,7 +422,7 @@ if(count($testimonials) == 0) {
     @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
     .category-card:hover .cat-img { transform: scale(1.15) !important; }
     .product-card:hover .prod-img { transform: scale(1.1); }
-    .banner-slide.active .banner-content h1 { animation: slideInUp 0.8s forwards; }
+    .banner-slide.active .banner-content h1 { animation: slideInUp 3.2s forwards; }
     @keyframes slideInUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 
@@ -476,5 +477,33 @@ if(count($testimonials) == 0) {
     }
     if(items.length > 1) setInterval(next, 8000);
 </script>
+
+ <!-- Section 3: 🏆 Why Choose Us Section (Pro Branding Fixed) -->
+    <section class="section-padding" style="background: #000; color: white;">
+        <div class="container-wide">
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;">
+                <div style="border-right: 1px solid rgba(255,255,255,0.1); padding: 50px;" class="fade-in-up">
+                    <i class="fas fa-handshake" style="font-size: 36px; color: var(--primary); margin-bottom: 25px;"></i>
+                    <h4 style="font-size: 18px; margin-bottom: 12px; color: white; font-weight: 700;">Authorized Partner</h4>
+                    <p style="font-size: 14px; color: #a1a1a6; line-height: 1.5;">Direct partner with HP, Dell, and Apple.</p>
+                </div>
+                <div style="border-right: 1px solid rgba(255,255,255,0.1); padding: 50px;" class="fade-in-up" style="transition-delay: 0.1s;">
+                    <i class="fas fa-shield-check" style="font-size: 36px; color: var(--primary); margin-bottom: 25px;"></i>
+                    <h4 style="font-size: 18px; margin-bottom: 12px; color: white; font-weight: 700;">100% Genuine</h4>
+                    <p style="font-size: 14px; color: #a1a1a6; line-height: 1.5;">Authentic hardware with official warranty.</p>
+                </div>
+                <div style="border-right: 1px solid rgba(255,255,255,0.1); padding: 50px;" class="fade-in-up" style="transition-delay: 0.2s;">
+                    <i class="fas fa-microchip" style="font-size: 36px; color: var(--primary); margin-bottom: 25px;"></i>
+                    <h4 style="font-size: 18px; margin-bottom: 12px; color: white; font-weight: 700;">Expert Integration</h4>
+                    <p style="font-size: 14px; color: #a1a1a6; line-height: 1.5;">Certified engineers build your rigs.</p>
+                </div>
+                <div style="padding: 50px;" class="fade-in-up" style="transition-delay: 0.3s;">
+                    <i class="fas fa-award" style="font-size: 36px; color: var(--primary); margin-bottom: 25px;"></i>
+                    <h4 style="font-size: 18px; margin-bottom: 12px; color: white; font-weight: 700;">Best Quotes</h4>
+                    <p style="font-size: 14px; color: #a1a1a6; line-height: 1.5;">Unbeatable prices for bulk and pro-builds.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
 <?php include 'includes/footer.php'; ?>

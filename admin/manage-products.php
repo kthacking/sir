@@ -21,7 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_POST['id'] ?? null;
     $name = $_POST['name'];
     $brand = $_POST['brand'];
-    $category = $_POST['category'];
+    $main_category = $_POST['main_category'];
+    $subcategory = $_POST['subcategory'];
+    $category_id = $_POST['category_id'] ?? null;
     $price = $_POST['price'];
     $offer_price = $_POST['offer_price'];
     $stock = $_POST['stock'];
@@ -49,13 +51,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($id) {
         // Update
-        $stmt = $pdo->prepare("UPDATE products SET name=?, brand=?, category=?, price=?, offer_price=?, stock=?, main_image=?, specifications=?, description=?, `condition`=? WHERE id=?");
-        $stmt->execute([$name, $brand, $category, $price, $offer_price, $stock, $image_path, $specifications, $description, $condition, $id]);
+        $stmt = $pdo->prepare("UPDATE products SET name=?, brand=?, category=?, main_category=?, subcategory=?, category_id=?, price=?, offer_price=?, stock=?, main_image=?, specifications=?, description=?, `condition`=? WHERE id=?");
+        $stmt->execute([$name, $brand, $subcategory, $main_category, $subcategory, $category_id, $price, $offer_price, $stock, $image_path, $specifications, $description, $condition, $id]);
         $product_id = $id;
     } else {
         // Insert
-        $stmt = $pdo->prepare("INSERT INTO products (name, brand, category, price, offer_price, stock, main_image, specifications, description, `condition`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$name, $brand, $category, $price, $offer_price, $stock, $image_path, $specifications, $description, $condition]);
+        $stmt = $pdo->prepare("INSERT INTO products (name, brand, category, main_category, subcategory, category_id, price, offer_price, stock, main_image, specifications, description, `condition`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$name, $brand, $subcategory, $main_category, $subcategory, $category_id, $price, $offer_price, $stock, $image_path, $specifications, $description, $condition]);
         $product_id = $pdo->lastInsertId();
     }
 
@@ -96,6 +98,21 @@ foreach ($products as &$p) {
     $p['gallery'] = $img_stmt->fetchAll(PDO::FETCH_COLUMN);
 }
 unset($p);
+
+// Fetch Categories for dropdown
+$cat_stmt = $pdo->query("SELECT * FROM categories ORDER BY name ASC");
+$all_categories = $cat_stmt->fetchAll();
+$structured_categories = [];
+foreach ($all_categories as $c) {
+    if (!$c['parent_id']) {
+        $structured_categories[$c['id']] = ['name' => $c['name'], 'subs' => []];
+    }
+}
+foreach ($all_categories as $c) {
+    if ($c['parent_id'] && isset($structured_categories[$c['parent_id']])) {
+        $structured_categories[$c['parent_id']]['subs'][] = $c;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -134,6 +151,7 @@ unset($p);
                     <th>Image</th>
                     <th>Product Details</th>
                     <th>Category</th>
+                    <th>Subcategory</th>
                     <th>Price</th>
                     <th>Stock</th>
                     <th style="text-align: right;">Actions</th>
@@ -157,7 +175,8 @@ unset($p);
                         <div style="font-weight: 600;"><?php echo htmlspecialchars($p['name']); ?></div>
                         <div style="font-size: 12px; color: var(--text-grey);"><?php echo htmlspecialchars($p['brand']); ?> | <?php echo $p['condition']; ?></div>
                     </td>
-                    <td><?php echo htmlspecialchars($p['category']); ?></td>
+                    <td><span class="status-badge" style="background: #f0f4ff; color: #1a56db;"><?php echo htmlspecialchars($p['main_category'] ?? $p['category']); ?></span></td>
+                    <td><span style="font-size: 13px; color: #4b5563;"><?php echo htmlspecialchars($p['subcategory'] ?? '-'); ?></span></td>
                     <td>
                         <div style="font-weight: 600;">₹<?php echo number_format($p['offer_price']); ?></div>
                         <div style="font-size: 11px; text-decoration: line-through; color: var(--text-grey);">₹<?php echo number_format($p['price']); ?></div>
@@ -200,15 +219,22 @@ unset($p);
                     </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
                     <div>
-                        <label style="font-size: 12px; font-weight: 600; color: var(--text-grey);">Category</label>
-                        <select name="category" id="prod_cat" required>
-                            <option value="Workstations">Workstations</option>
-                            <option value="Laptops">Laptops</option>
-                            <option value="Components">Components</option>
-                            <option value="Printers & Peripherals">Printers & Peripherals</option>
+                        <label style="font-size: 12px; font-weight: 600; color: var(--text-grey);">Main Category</label>
+                        <select name="main_category" id="prod_main_cat" onchange="updateSubcategories()" required>
+                            <option value="">Select Main</option>
+                            <?php foreach($structured_categories as $id => $cat): ?>
+                                <option value="<?php echo $cat['name']; ?>" data-id="<?php echo $id; ?>"><?php echo $cat['name']; ?></option>
+                            <?php endforeach; ?>
                         </select>
+                    </div>
+                    <div>
+                        <label style="font-size: 12px; font-weight: 600; color: var(--text-grey);">Subcategory</label>
+                        <select name="subcategory" id="prod_sub_cat" required>
+                            <option value="">Select Sub</option>
+                        </select>
+                        <input type="hidden" name="category_id" id="prod_cat_id">
                     </div>
                     <div>
                         <label style="font-size: 12px; font-weight: 600; color: var(--text-grey);">Condition</label>
@@ -292,7 +318,39 @@ unset($p);
 </main>
 
 <script>
+    const allSubcategories = <?php echo json_encode($structured_categories); ?>;
+
+    function updateSubcategories(selectedSub = '') {
+        const mainSelect = document.getElementById('prod_main_cat');
+        const subSelect = document.getElementById('prod_sub_cat');
+        const catIdInput = document.getElementById('prod_cat_id');
+        
+        const selectedMainOption = mainSelect.options[mainSelect.selectedIndex];
+        const mainId = selectedMainOption.getAttribute('data-id');
+        
+        // Reset subcategory
+        subSelect.innerHTML = '<option value="">Select Sub</option>';
+        
+        if (mainId && allSubcategories[mainId]) {
+            allSubcategories[mainId].subs.forEach(sub => {
+                const opt = document.createElement('option');
+                opt.value = sub.name;
+                opt.text = sub.name;
+                opt.setAttribute('data-id', sub.id);
+                if (sub.name === selectedSub) opt.selected = true;
+                subSelect.appendChild(opt);
+            });
+        }
+    }
+
+    // Update cat ID on sub selection
+    document.getElementById('prod_sub_cat').addEventListener('change', function() {
+        const selectedSubOption = this.options[this.selectedIndex];
+        document.getElementById('prod_cat_id').value = selectedSubOption.getAttribute('data-id');
+    });
+
     let isEditing = false;
+
     let initialValues = {};
     let saveTimeout = null;
 
@@ -311,7 +369,21 @@ unset($p);
         document.getElementById('prod_img_url').value = p.main_image.startsWith('http') ? p.main_image : '';
         document.getElementById('prod_name').value = p.name;
         document.getElementById('prod_brand').value = p.brand;
-        document.getElementById('prod_cat').value = p.category;
+        
+        // Set Main Category
+        const mainCat = p.main_category || p.category;
+        const mainSelect = document.getElementById('prod_main_cat');
+        for(let i=0; i<mainSelect.options.length; i++) {
+            if(mainSelect.options[i].value === mainCat) {
+                mainSelect.selectedIndex = i;
+                break;
+            }
+        }
+        
+        // Update Subcategories and set selected
+        updateSubcategories(p.subcategory || p.category);
+        document.getElementById('prod_cat_id').value = p.category_id;
+        
         document.getElementById('prod_cond').value = p.condition;
         document.getElementById('prod_price').value = p.price;
         document.getElementById('prod_offer').value = p.offer_price;
@@ -335,7 +407,9 @@ unset($p);
         document.getElementById('prod_current_image').value = '';
         document.getElementById('prod_name').value = '';
         document.getElementById('prod_brand').value = '';
-        document.getElementById('prod_cat').value = 'Workstations';
+        document.getElementById('prod_main_cat').value = '';
+        document.getElementById('prod_sub_cat').innerHTML = '<option value="">Select Sub</option>';
+        document.getElementById('prod_cat_id').value = '';
         document.getElementById('prod_cond').value = 'New';
         document.getElementById('prod_price').value = '';
         document.getElementById('prod_offer').value = '';
