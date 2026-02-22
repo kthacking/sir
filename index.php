@@ -177,28 +177,121 @@ if(count($testimonials) == 0) {
                 <a href="products.php" class="btn btn-outline fade-in-up">Browse All Gear <i class="fas fa-arrow-right"></i></a>
             </div>
             
-            <div class="grid-main" style="grid-template-columns: repeat(4, 1fr);">
-                <?php foreach($latest_products as $p): ?>
-                <div class="glass-card fade-in-up" style="padding: 20px; border-radius: 30px;">
-                    <div style="height: 260px; background: #fff; border-radius: 20px; margin-bottom: 25px; display: flex; align-items: center; justify-content: center; padding: 30px; overflow: hidden; position: relative;">
-                        <?php if($p['stock'] < 5): ?>
-                            <div style="position: absolute; top: 15px; right: 15px; background: rgba(255,59,48,0.1); color: #ff3b30; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 700;">LOW STOCK</div>
-                        <?php endif; ?>
-                        <img src="<?php echo $p['main_image']; ?>" style="max-height: 100%; max-width: 100%; object-fit: contain; transition: transform 0.6s var(--transition);" class="prod-img">
-                    </div>
-                    <div style="padding: 0 10px 10px 10px;">
-                        <h3 style="font-size: 19px; margin-bottom: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600;"><?php echo htmlspecialchars($p['name']); ?></h3>
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-size: 12px; color: var(--text-grey); margin-bottom: 4px;"><?php echo htmlspecialchars($p['brand']); ?></div>
-                                <div style="font-weight: 800; font-size: 24px; color: var(--text-dark);">₹<?php echo number_format($p['offer_price']); ?></div>
+            <!-- Horizontal Scrollable Container -->
+            <div class="latest-carousel-wrapper">
+                <div class="latest-carousel" id="latest-carousel">
+                    <?php foreach($latest_products as $p): ?>
+                    <div class="carousel-card-item">
+                        <div class="glass-card fade-in-up" style="padding: 16px; border-radius: 24px; height: 100%;">
+                            <div style="height: 200px; background: #fff; border-radius: 18px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; padding: 20px; overflow: hidden; position: relative; background: radial-gradient(circle at center, #ffffff 0%, #f9f9fb 100%);">
+                                <?php if($p['stock'] < 5): ?>
+                                    <div style="position: absolute; top: 12px; right: 12px; background: rgba(255,59,48,0.1); color: #ff3b30; padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: 700; z-index: 2;">LOW STOCK</div>
+                                <?php endif; ?>
+                                <img src="<?php echo $p['main_image']; ?>" 
+                                     onerror="this.src='https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?q=80&w=1470&auto=format&fit=crop';"
+                                     style="max-height: 100%; max-width: 100%; object-fit: contain; transition: transform 0.6s var(--transition);" 
+                                     class="prod-img">
                             </div>
-                            <a href="product-details.php?id=<?php echo $p['id']; ?>" class="btn btn-primary" style="padding: 12px 24px; font-size: 14px; border-radius: 12px;">Shop <i class="fas fa-plus"></i></a>
+                            <div style="padding: 0 5px;">
+                                <h3 style="font-size: 16px; margin-bottom: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 700; color: #1d1d1f;"><?php echo htmlspecialchars($p['name']); ?></h3>
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <div style="font-size: 11px; color: var(--text-grey); margin-bottom: 2px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;"><?php echo htmlspecialchars($p['brand']); ?></div>
+                                        <div style="font-weight: 800; font-size: 20px; color: var(--primary);">₹<?php echo number_format($p['offer_price']); ?></div>
+                                    </div>
+                                    <a href="product-details.php?id=<?php echo $p['id']; ?>" class="btn btn-primary" style="width: 38px; height: 38px; padding: 0; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 14px;"><i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <?php endforeach; ?>
                 </div>
-                <?php endforeach; ?>
+
+                <!-- Carousel Controls (Optional but nice) -->
+                <button class="carousel-nav prev" onclick="scrollCarousel(-1)"><i class="fas fa-chevron-left"></i></button>
+                <button class="carousel-nav next" onclick="scrollCarousel(1)"><i class="fas fa-chevron-right"></i></button>
             </div>
+        </div>
+    </section>
+
+    <style>
+        .latest-carousel-wrapper {
+            position: relative;
+            margin: 0 -20px;
+            padding: 20px;
+        }
+
+        .latest-carousel {
+            display: flex;
+            gap: 24px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding-bottom: 40px;
+            padding-right: 100px;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE and Edge */
+            scroll-behavior: smooth;
+        }
+
+        .latest-carousel::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+
+        .carousel-card-item {
+            flex: 0 0 300px;
+            scroll-snap-align: start;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            border: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s;
+            opacity: 0;
+        }
+
+        .latest-carousel-wrapper:hover .carousel-nav {
+            opacity: 1;
+        }
+
+        .carousel-nav:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-nav.prev { left: 0; }
+        .carousel-nav.next { right: 0; }
+
+        @media (max-width: 768px) {
+            .carousel-card-item { flex: 0 0 260px; }
+            .carousel-nav { display: none; }
+        }
+    </style>
+
+    <script>
+        function scrollCarousel(direction) {
+            const carousel = document.getElementById('latest-carousel');
+            const scrollAmount = 324; // Card width + gap
+            carousel.scrollBy({
+                left: direction * scrollAmount,
+                behavior: 'smooth'
+            });
+        }
+    </script>
         </div>
     </section>
 
