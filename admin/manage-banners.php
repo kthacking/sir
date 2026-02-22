@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $link = $_POST['link'] ?? '#';
     $expiry_date = !empty($_POST['expiry_date']) ? $_POST['expiry_date'] : null;
     $active = isset($_POST['active']) ? 1 : 0;
+    $use_in_inventory_bg = isset($_POST['use_in_inventory_bg']) ? 1 : 0;
 
     // Image Logic (URL or Upload)
     $image_url = $_POST['current_image'] ?? '';
@@ -40,12 +41,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    // If this banner is set as inventory bg, disable other ones
+    if ($use_in_inventory_bg) {
+        $pdo->query("UPDATE banners SET use_in_inventory_bg = 0");
+    }
+
     if ($id) {
-        $stmt = $pdo->prepare("UPDATE banners SET title=?, subtitle=?, image_url=?, link=?, expiry_date=?, active=? WHERE id=?");
-        $stmt->execute([$title, $subtitle, $image_url, $link, $expiry_date, $active, $id]);
+        $stmt = $pdo->prepare("UPDATE banners SET title=?, subtitle=?, image_url=?, link=?, expiry_date=?, active=?, use_in_inventory_bg=? WHERE id=?");
+        $stmt->execute([$title, $subtitle, $image_url, $link, $expiry_date, $active, $use_in_inventory_bg, $id]);
     } else {
-        $stmt = $pdo->prepare("INSERT INTO banners (title, subtitle, image_url, link, expiry_date, active) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$title, $subtitle, $image_url, $link, $expiry_date, $active]);
+        $stmt = $pdo->prepare("INSERT INTO banners (title, subtitle, image_url, link, expiry_date, active, use_in_inventory_bg) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$title, $subtitle, $image_url, $link, $expiry_date, $active, $use_in_inventory_bg]);
     }
     redirect('admin/manage-banners.php?msg=success');
 }
@@ -167,9 +173,15 @@ $banners = $stmt->fetchAll();
                     </div>
                 </div>
 
-                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 25px;">
-                    <input type="checkbox" name="active" id="banner_active" style="width: auto; margin: 0;" checked>
-                    <label for="banner_active" style="font-size: 14px; font-weight: 500;">Show this banner on homepage</label>
+                <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 25px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" name="active" id="banner_active" style="width: auto; margin: 0;" checked>
+                        <label for="banner_active" style="font-size: 14px; font-weight: 500;">Show this banner on homepage</label>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" name="use_in_inventory_bg" id="banner_inventory_bg" style="width: auto; margin: 0;">
+                        <label for="banner_inventory_bg" style="font-size: 14px; font-weight: 500; color: var(--primary);">Use in “Latest in Inventory” Section Background</label>
+                    </div>
                 </div>
 
                 <div style="display: flex; gap: 12px; justify-content: flex-end;">
@@ -208,6 +220,7 @@ $banners = $stmt->fetchAll();
             document.getElementById('banner_expiry').value = '';
         }
         document.getElementById('banner_active').checked = b.active == 1;
+        document.getElementById('banner_inventory_bg').checked = b.use_in_inventory_bg == 1;
         document.getElementById('bannerModal').style.display = 'flex';
         
         restoreDraft(); // Check if there's a draft for this specific ID
@@ -223,6 +236,7 @@ $banners = $stmt->fetchAll();
         document.getElementById('banner_link').value = '';
         document.getElementById('banner_expiry').value = '';
         document.getElementById('banner_active').checked = true;
+        document.getElementById('banner_inventory_bg').checked = false;
     }
 
     async function closeModal(confirmNeeded = false) { 

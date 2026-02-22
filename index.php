@@ -13,6 +13,11 @@ $latest_products = $latest_stmt->fetchAll();
 $testimonial_stmt = $pdo->query("SELECT * FROM testimonials ORDER BY id DESC LIMIT 3");
 $testimonials = $testimonial_stmt->fetchAll();
 
+// Fetch Inventory Section Background Banner
+$inv_bg_stmt = $pdo->query("SELECT image_url FROM banners WHERE active = 1 AND use_in_inventory_bg = 1 ORDER BY id DESC LIMIT 1");
+$inv_banner = $inv_bg_stmt->fetch();
+$inventory_bg_url = $inv_banner ? $inv_banner['image_url'] : 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop';
+
 // Use sample testimonials if none found in DB
 if(count($testimonials) == 0) {
     $testimonials = [
@@ -90,6 +95,9 @@ window.addEventListener("load", function() {
 }
 </style>
     </section>
+
+   
+
 
     <!-- Section 2: 🔥 Featured Categories Grid -->
     <section class="section-padding">
@@ -186,7 +194,9 @@ window.addEventListener("load", function() {
         .inventory-showcase-section {
             position: relative;
             padding: 50px 0;
-            background: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop') center center no-repeat;
+            background-image: url('<?php echo $inventory_bg_url; ?>');
+            background-position: center center;
+            background-repeat: no-repeat;
             background-size: cover;
             min-height: 480px;
             max-height: 520px;
@@ -194,7 +204,7 @@ window.addEventListener("load", function() {
             align-items: center;
             overflow: hidden;
             color: white;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255, 0, 255, 0.05);
         }
 
         .inventory-bg-overlay {
@@ -568,7 +578,7 @@ window.addEventListener("load", function() {
         });
     </script>
         </div>
-    </section>
+  </section>
 
 
     <!-- New: FPS Performance Section -->
@@ -655,7 +665,127 @@ window.addEventListener("load", function() {
             </div>
         </div>
     </section>
+        <section class="scroll-video">
+             <canvas id="videoCanvas"></canvas>
+        </section>
 
+        <style>
+            .scroll-video {
+                height: 2000vh; /* Further increased height to make the animation significantly slower */
+                position: relative;
+                background: #000;
+                margin-top: -1px; /* Avoid sub-pixel gaps */
+            }
+            #videoCanvas {
+                position: sticky;
+                top: 0;
+                width: 100vw;
+                height: 100vh;
+                display: block;
+                z-index: 5;
+            }
+        </style>
+
+        <script>
+            /**
+             * Scroll-based Image Sequence Animation
+             * Optimized for smooth 60fps-like playback via Canvas
+             */
+            const canvas = document.getElementById('videoCanvas');
+            const context = canvas.getContext('2d');
+            
+            const frameCount = 1521; // Total frames: 1730 - 210 + 1
+            const startFrame = 210;
+            const currentFrame = index => (
+                `assets/images/3d/From Main Klickpin CF- Pinterest Video - 17uulrbeo_${index.toString().padStart(6, '0')}.jpg`
+            );
+
+            const images = [];
+            const videoSequence = {
+                frame: 0
+            };
+
+            // Preload images
+            let loadedCount = 0;
+            function preloadImages() {
+                for (let i = 0; i < frameCount; i++) {
+                    const img = new Image();
+                    img.src = currentFrame(startFrame + i);
+                    img.onload = () => {
+                        loadedCount++;
+                        if (loadedCount === 1) {
+                            // Draw first frame immediately
+                            renderImage(img);
+                        }
+                    };
+                    images.push(img);
+                }
+            }
+
+            function renderImage(img) {
+                if (!img) return;
+                
+                // Canvas sizing
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+
+                // Object-fit: cover logic for Canvas
+                const imgRatio = img.width / img.height;
+                const canvasRatio = canvas.width / canvas.height;
+                
+                let drawWidth, drawHeight, offsetX, offsetY;
+
+                if (canvasRatio > imgRatio) {
+                    drawWidth = canvas.width;
+                    drawHeight = canvas.width / imgRatio;
+                    offsetX = 0;
+                    offsetY = (canvas.height - drawHeight) / 2;
+                } else {
+                    drawWidth = canvas.height * imgRatio;
+                    drawHeight = canvas.height;
+                    offsetX = (canvas.width - drawWidth) / 2;
+                    offsetY = 0;
+                }
+
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                context.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+            }
+
+            function updateScroll() {
+                const section = document.querySelector('.scroll-video');
+                if (!section) return;
+
+                const sectionRect = section.getBoundingClientRect();
+                const sectionHeight = section.offsetHeight;
+                const viewHeight = window.innerHeight;
+                
+                // Calculate progress within section
+                // Starts when section top hits screen top, ends when section bottom hits screen bottom
+                const progress = Math.max(0, Math.min(1, (-sectionRect.top) / (sectionHeight - viewHeight)));
+                
+                const frameIndex = Math.min(
+                    frameCount - 1,
+                    Math.floor(progress * frameCount)
+                );
+
+                if (images[frameIndex] && images[frameIndex].complete) {
+                    requestAnimationFrame(() => renderImage(images[frameIndex]));
+                }
+            }
+
+            // Initialization
+            preloadImages();
+            window.addEventListener('scroll', updateScroll);
+            window.addEventListener('resize', () => {
+                const section = document.querySelector('.scroll-video');
+                const sectionRect = section.getBoundingClientRect();
+                const sectionHeight = section.offsetHeight;
+                const viewHeight = window.innerHeight;
+                const progress = Math.max(0, Math.min(1, (-sectionRect.top) / (sectionHeight - viewHeight)));
+                const frameIndex = Math.min(frameCount - 1, Math.floor(progress * frameCount));
+                renderImage(images[frameIndex] || images[0]);
+            });
+        </script>
     <!-- Section 7: 📍 Action CTA -->
     <section class="section-padding" style="background: white;">
         <div class="container-wide">
