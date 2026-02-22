@@ -96,7 +96,7 @@ if (!isset($_SESSION['cart'])) {
     <ul class="nav-links">
         <li><a href="<?php echo $base_url; ?>index.php">Home</a></li>
         <li><a href="<?php echo $base_url; ?>products.php">Shop All</a></li>
-        <li><a href="<?php echo $base_url; ?>products.php?category=Workstations">PCs</a></li>
+        <li><a href="<?php echo $base_url; ?>products.php?group=pcs">PCs</a></li>
         <li><a href="<?php echo $base_url; ?>products.php?category=Laptops">Laptops</a></li>
         <li><a href="<?php echo $base_url; ?>pc-builder.php">Custom Builds</a></li>
         <li><a href="<?php echo $base_url; ?>services.php">Services</a></li>

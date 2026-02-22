@@ -226,20 +226,36 @@ $db_brands = $brand_stmt->fetchAll();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        // Handle URL parameters for categories
+        // Handle URL parameters for categories and groups
         const urlParams = new URLSearchParams(window.location.search);
-        const catParam = urlParams.get('category');
-        if (catParam) {
-            const checkboxes = document.querySelectorAll(`input[name="category"]`);
-            checkboxes.forEach(cb => {
-                if (cb.value.toLowerCase() === catParam.toLowerCase()) {
+        
+        // 1. Group-based Filtering (e.g., ?group=pcs)
+        const groupParam = urlParams.get('group');
+        if (groupParam === 'pcs') {
+            // Flexible PC categories list - add any new subcategories here
+            const pcCategories = ['Laptops', 'Personal Computers', 'Workstations', 'Desktops'];
+            
+            document.querySelectorAll('input[name="category"]').forEach(cb => {
+                if (pcCategories.map(c => c.toLowerCase()).includes(cb.value.toLowerCase())) {
                     cb.checked = true;
-                    // Ensure parent group is open
                     const content = cb.closest('.filter-content');
                     if (content) content.classList.add('show');
                 }
             });
         }
+
+        // 2. Single Category Filtering (e.g., ?category=Laptops)
+        const catParam = urlParams.get('category');
+        if (catParam) {
+            document.querySelectorAll('input[name="category"]').forEach(cb => {
+                if (cb.value.toLowerCase() === catParam.toLowerCase()) {
+                    cb.checked = true;
+                    const content = cb.closest('.filter-content');
+                    if (content) content.classList.add('show');
+                }
+            });
+        }
+
         filterProducts();
     });
 </script>
