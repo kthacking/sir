@@ -103,12 +103,12 @@ window.addEventListener("load", function() {
             <div class="grid-main">
                 <?php 
                 $cats = [
-                    ['name' => 'Workstations', 'file' => 'products.php?category=Workstations', 'icon' => 'fa-desktop', 'img' => 'https://i.pinimg.com/1200x/be/33/08/be3308ae1c7af201936851c8ce917a9e.jpg', 'desc' => 'High-end workstation systems for professionals.'],
-                    ['name' => 'Laptops', 'file' => 'products.php?category=Laptops', 'icon' => 'fa-laptop', 'img' => 'https://i.pinimg.com/736x/9f/34/d7/9f34d789f664aba97f6e1326498eb2c3.jpg', 'desc' => 'Thin, light and powerful portable machines.'],
-                    ['name' => 'Custom Builds', 'file' => 'products.php?category=Custom%20PCs', 'icon' => 'fa-gamepad', 'img' => 'https://i.pinimg.com/1200x/41/4e/bf/414ebfd869351533e6ea13af555bb988.jpg', 'desc' => 'Tailored gaming rigs built for performance.'],
-                    ['name' => 'Components', 'file' => 'products.php?category=Components', 'icon' => 'fa-microchip', 'img' => 'https://i.pinimg.com/736x/b2/23/e0/b223e0871a72dcff75483a7758a46371.jpg', 'desc' => 'The best hardware to upgrade your rig.'],
+                    ['name' => 'Workstations', 'file' => 'products.php?group=pcs', 'icon' => 'fa-desktop', 'img' => 'https://i.pinimg.com/1200x/be/33/08/be3308ae1c7af201936851c8ce917a9e.jpg', 'desc' => 'High-end workstation systems for professionals.'],
+                    ['name' => 'Laptops', 'file' => 'products.php?group=laptops', 'icon' => 'fa-laptop', 'img' => 'https://i.pinimg.com/736x/9f/34/d7/9f34d789f664aba97f6e1326498eb2c3.jpg', 'desc' => 'Thin, light and powerful portable machines.'],
+                    ['name' => 'Gaming PCs', 'file' => 'products.php?category=Gaming%20PCs', 'icon' => 'fa-gamepad', 'img' => 'https://i.pinimg.com/1200x/41/4e/bf/414ebfd869351533e6ea13af555bb988.jpg', 'desc' => 'Tailored gaming rigs built for performance.'],
+                    ['name' => 'Components', 'file' => 'products.php?main_category=Components', 'icon' => 'fa-microchip', 'img' => 'https://i.pinimg.com/736x/b2/23/e0/b223e0871a72dcff75483a7758a46371.jpg', 'desc' => 'The best hardware to upgrade your rig.'],
                     ['name' => 'Services', 'file' => 'services.php', 'icon' => 'fa-tools', 'img' => 'https://i.pinimg.com/736x/aa/97/26/aa9726ec3cd7460f4d6aa428d07eb500.jpg', 'desc' => 'Expert repair and support for all devices.'],
-                    ['name' => 'Peripherals', 'file' => 'products.php?category=Printers%20%26%20Peripherals', 'icon' => 'fa-print', 'img' => 'https://i.pinimg.com/736x/e5/c5/fd/e5c5fd7ad7ccf53c35d3010f91e66e7c.jpg', 'desc' => 'Essential gear for your digital lifestyle.']
+                    ['name' => 'Peripherals', 'file' => 'products.php?main_category=Printers%20%26%20Peripherals', 'icon' => 'fa-print', 'img' => 'https://i.pinimg.com/736x/e5/c5/fd/e5c5fd7ad7ccf53c35d3010f91e66e7c.jpg', 'desc' => 'Essential gear for your digital lifestyle.']
                 ];
                 foreach($cats as $index => $c):
                 ?>
@@ -130,131 +130,372 @@ window.addEventListener("load", function() {
     </section>
 
        <!-- Section 4: 💻 Latest Products (Dynamic From DB) -->
-    <section class="section-padding bg-light">
-        <div class="container-wide">
-            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 80px;">
-                <div class="fade-in-up">
-                    <div class="badge-pro">New Arrivals</div>
-                    <h2 class="gradient-text">Latest in Inventory</h2>
-                    <p>Experience the cutting-edge of performance computing.</p>
-                </div>
-                <a href="products.php" class="btn btn-outline fade-in-up">Browse All Gear <i class="fas fa-arrow-right"></i></a>
-            </div>
+    <!-- Section 4: 💻 Ultra-Compact Product Strip -->
+    <section class="inventory-showcase-section">
+        <div class="inventory-bg-overlay"></div>
+        <div class="container-wide inventory-content-wrapper">
             
-            <!-- Horizontal Scrollable Container -->
-            <div class="latest-carousel-wrapper">
-                <div class="latest-carousel" id="latest-carousel">
-                    <?php foreach($latest_products as $p): ?>
-                    <div class="carousel-card-item">
-                        <div class="glass-card fade-in-up" style="padding: 16px; border-radius: 24px; height: 100%;">
-                            <div style="height: 200px; background: #fff; border-radius: 18px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; padding: 20px; overflow: hidden; position: relative; background: radial-gradient(circle at center, #ffffff 0%, #f9f9fb 100%);">
-                                <?php if($p['stock'] < 5): ?>
-                                    <div style="position: absolute; top: 12px; right: 12px; background: rgba(255,59,48,0.1); color: #ff3b30; padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: 700; z-index: 2;">LOW STOCK</div>
-                                <?php endif; ?>
-                                <img src="<?php echo $p['main_image']; ?>" 
-                                     onerror="this.src='https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?q=80&w=1470&auto=format&fit=crop';"
-                                     style="max-height: 100%; max-width: 100%; object-fit: contain; transition: transform 0.6s var(--transition);" 
-                                     class="prod-img">
-                            </div>
-                            <div style="padding: 0 5px;">
-                                <h3 style="font-size: 16px; margin-bottom: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 700; color: #1d1d1f;"><?php echo htmlspecialchars($p['name']); ?></h3>
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <div>
-                                        <div style="font-size: 11px; color: var(--text-grey); margin-bottom: 2px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;"><?php echo htmlspecialchars($p['brand']); ?></div>
-                                        <div style="font-weight: 800; font-size: 20px; color: var(--primary);">₹<?php echo number_format($p['offer_price']); ?></div>
+            <div class="inventory-header fade-in-up">
+                <div class="header-text-box" style="display: block; float: right; ">
+                    <div class="badge-pro" style="color: var(--primary); border-color: var(--primary); background: rgba(0,113,227,0.1); font-size: 9px; padding: 3px 10px;">Premium Gear</div>
+                    <h2 class="showcase-title">Latest in Inventory</h2>
+                    <p class="showcase-subtitle">The next generation of high-performance computing.</p>
+                    <div class="showcase-controls">
+                        <a href="products.php" class="btn btn-primary" style="padding: 8px 20px; font-size: 13px;">Explore All <i class="fas fa-chevron-right" style="font-size: 9px; margin-left: 5px;"></i></a>
+                        <div class="carousel-arrows">
+                            <button class="arrow-btn prev" onclick="scrollInventory(-1)"><i class="fas fa-chevron-left" style="font-size: 12px;"></i></button>
+                            <button class="arrow-btn next" onclick="scrollInventory(1)"><i class="fas fa-chevron-right" style="font-size: 12px;"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="inventory-carousel-wrapper">
+                <div class="portal-gradient-left"></div>
+                <div class="portal-glow-line"></div>
+                <div class="inventory-carousel-container">
+                    <div class="inventory-carousel" id="inventory-carousel">
+                        <?php foreach($latest_products as $p): ?>
+                        <div class="inventory-card-item">
+                            <div class="glass-showcase-card">
+                                <div class="card-img-wrapper">
+                                    <img src="<?php echo $p['main_image']; ?>" 
+                                         onerror="this.src='https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?q=80&w=1470&auto=format&fit=crop';"
+                                         alt="<?php echo htmlspecialchars($p['name']); ?>" 
+                                         class="showcase-img">
+                                </div>
+                                <div class="card-info-box">
+                                    <span class="card-brand-tag"><?php echo htmlspecialchars($p['brand']); ?></span>
+                                    <h3 class="card-product-name"><?php echo htmlspecialchars($p['name']); ?></h3>
+                                    <div class="card-price-row">
+                                        <span class="card-price">₹<?php echo number_format($p['offer_price']); ?></span>
+                                        <a href="product-details.php?id=<?php echo $p['id']; ?>" class="card-action-mini"><i class="fas fa-plus"></i></a>
                                     </div>
-                                    <a href="product-details.php?id=<?php echo $p['id']; ?>" class="btn btn-primary" style="width: 38px; height: 38px; padding: 0; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 14px;"><i class="fas fa-arrow-right"></i></a>
                                 </div>
                             </div>
                         </div>
+                        <?php endforeach; ?>
                     </div>
-                    <?php endforeach; ?>
                 </div>
-
-                <!-- Carousel Controls (Optional but nice) -->
-                <button class="carousel-nav prev" onclick="scrollCarousel(-1)"><i class="fas fa-chevron-left"></i></button>
-                <button class="carousel-nav next" onclick="scrollCarousel(1)"><i class="fas fa-chevron-right"></i></button>
             </div>
+
         </div>
     </section>
 
     <style>
-        .latest-carousel-wrapper {
+        .inventory-showcase-section {
             position: relative;
-            margin: 0 -20px;
-            padding: 20px;
-        }
-
-        .latest-carousel {
+            padding: 48px 0;
+            background: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop') center center no-repeat;
+            background-size: cover;
+            min-height: 480px;
+            max-height: 520px;
             display: flex;
-            gap: 24px;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            padding-bottom: 40px;
-            padding-right: 100px;
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none;  /* IE and Edge */
-            scroll-behavior: smooth;
+            align-items: center;
+            overflow: hidden;
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
-        .latest-carousel::-webkit-scrollbar {
-            display: none; /* Chrome, Safari, Opera */
-        }
-
-        .carousel-card-item {
-            flex: 0 0 300px;
-            scroll-snap-align: start;
-            transition: all 0.3s ease;
-        }
-
-        .carousel-nav {
+        .inventory-bg-overlay {
             position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 50px;
-            height: 50px;
-            background: white;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.75) 40%, rgba(0,0,0,0.2) 100%);
+            z-index: 1;
+        }
+
+        .inventory-content-wrapper {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .inventory-header {
+            flex: 0 0 32%; /* Balanced for 35/65 approx */
+            z-index: 10;
+        }
+
+        .showcase-title {
+            font-size: 32px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin: 8px 0;
+            letter-spacing: -1.2px;
+            color: white;
+        }
+
+        .showcase-subtitle {
+            font-size: 12px;
+            opacity: 0.7;
+            line-height: 1.4;
+            margin-bottom: 18px;
+            max-width: 90%;
+        }
+
+        .showcase-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .carousel-arrows {
+            display: flex;
+            gap: 8px;
+        }
+
+        .arrow-btn {
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            border: 1px solid rgba(0,0,0,0.05);
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.05);
+            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             cursor: pointer;
-            z-index: 10;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .arrow-btn:hover {
+            background: white;
+            color: black;
+            transform: scale(1.05);
+        }
+
+        .inventory-carousel-wrapper {
+            flex: 0 0 68%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            overflow: visible;
+        }
+
+        .portal-glow-line {
+            position: absolute;
+            left: -5px;
+            top: 20px;
+            bottom: 20px;
+            width: 3px;
+            background: #fff;
+            box-shadow: 0 0 15px #0071e3, 0 0 30px #0071e3;
+            z-index: 5;
+            border-radius: 10px;
+            opacity: 0.8;
+        }
+
+        .portal-gradient-left {
+            position: absolute;
+            left: -100px;
+            top: 0;
+            bottom: 0;
+            width: 150px;
+            background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 100%);
+            z-index: 4;
+            pointer-events: none;
+            backdrop-filter: blur(0px); /* Will be handled by JS */
+        }
+
+        .inventory-carousel-container {
+            width: 100%;
+            overflow: visible;
+            mask-image: linear-gradient(to right, transparent 0%, black 15%, black 100%);
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 100%);
+        }
+
+        .inventory-carousel {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding: 20px 0;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            scroll-behavior: smooth;
+        }
+
+        .inventory-carousel::-webkit-scrollbar { display: none; }
+
+        .inventory-card-item {
+            flex: 0 0 260px;
+            scroll-snap-align: start;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s, filter 0.4s;
+            transform-origin: center;
+            will-change: transform, opacity, filter;
+        }
+
+        .glass-showcase-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            padding: 14px;
+            height: 380px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .glass-showcase-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .card-img-wrapper {
+            height: 180px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 10px;
+            background: radial-gradient(circle at center, #ffffff 0%, #f4f4f6 100%);
+        }
+
+        .showcase-img {
+            max-width: 82%;
+            max-height: 82%;
+            object-fit: contain;
+            transition: transform 0.5s ease;
+        }
+
+        .card-brand-tag {
+            font-size: 8px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            opacity: 0.6;
+            margin-bottom: 3px;
+            display: block;
+        }
+
+        .card-product-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: auto;
+            line-height: 1.25;
+            max-height: 33px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .card-price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .card-price {
+            font-size: 17px;
+            font-weight: 800;
+            color: white;
+        }
+
+        .card-action-mini {
+            width: 30px;
+            height: 30px;
+            background: white;
+            color: black;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
             transition: all 0.3s;
-            opacity: 0;
+            font-size: 10px;
         }
 
-        .latest-carousel-wrapper:hover .carousel-nav {
-            opacity: 1;
-        }
-
-        .carousel-nav:hover {
+        .card-action-mini:hover {
             background: var(--primary);
             color: white;
-            border-color: var(--primary);
-            transform: translateY(-50%) scale(1.1);
         }
 
-        .carousel-nav.prev { left: 0; }
-        .carousel-nav.next { right: 0; }
+        @media (max-width: 1200px) {
+            .inventory-showcase-section { padding: 32px 0; min-height: auto; max-height: none; }
+            .inventory-content-wrapper { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .inventory-header, .inventory-carousel-wrapper { flex: none; width: 100%; }
+            .showcase-title { font-size: 28px; }
+            .portal-glow-line { display: none; }
+            .inventory-carousel-container { mask-image: none; -webkit-mask-image: none; }
+        }
 
         @media (max-width: 768px) {
-            .carousel-card-item { flex: 0 0 260px; }
-            .carousel-nav { display: none; }
+            .inventory-card-item { flex: 0 0 220px; }
+            .glass-showcase-card { height: 340px; }
+            .card-img-wrapper { height: 140px; }
         }
     </style>
 
     <script>
-        function scrollCarousel(direction) {
-            const carousel = document.getElementById('latest-carousel');
-            const scrollAmount = 324; // Card width + gap
+        function scrollInventory(direction) {
+            const carousel = document.getElementById('inventory-carousel');
+            const scrollAmount = 272; 
             carousel.scrollBy({
                 left: direction * scrollAmount,
                 behavior: 'smooth'
             });
         }
+
+        const carousel = document.getElementById('inventory-carousel');
+        const cards = document.querySelectorAll('.inventory-card-item');
+
+        function updatePortalEffect() {
+            const carouselRect = carousel.getBoundingClientRect();
+            const centerX = carouselRect.left + carouselRect.width / 2;
+
+            cards.forEach(card => {
+                const cardRect = card.getBoundingClientRect();
+                const cardCenter = cardRect.left + cardRect.width / 2;
+                
+                // Portal Exit (Left Edge)
+                const distanceFromLeft = cardRect.left - carouselRect.left;
+                const portalThreshold = 150;
+                
+                let blur = 0;
+                let opacity = 1;
+                let scale = 1;
+
+                if (distanceFromLeft < portalThreshold) {
+                    const factor = 1 - (distanceFromLeft / portalThreshold);
+                    blur = factor * 10;
+                    opacity = 1 - (factor * 0.7);
+                    scale = 1 - (factor * 0.1);
+                }
+
+                // Depth Scaling (Center focus)
+                const distanceToCenter = Math.abs(centerX - cardCenter);
+                const maxDistance = carouselRect.width;
+                const centerFactor = 1 - (distanceToCenter / maxDistance);
+                
+                // If not in portal zone, apply center elevation
+                if (distanceFromLeft >= portalThreshold) {
+                    scale = 0.95 + (centerFactor * 0.1);
+                }
+
+                card.style.filter = `blur(${blur}px)`;
+                card.style.opacity = opacity;
+                card.style.transform = `scale(${scale})`;
+            });
+        }
+
+        carousel.addEventListener('scroll', updatePortalEffect);
+        window.addEventListener('resize', updatePortalEffect);
+        // Initial run
+        setTimeout(updatePortalEffect, 100);
     </script>
         </div>
     </section>

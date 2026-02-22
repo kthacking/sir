@@ -2,8 +2,15 @@
 include 'includes/header.php';
 
 // Initial counts and categories for sidebar
-$cat_stmt = $pdo->query("SELECT category, COUNT(*) as count FROM products GROUP BY category");
-$db_categories = $cat_stmt->fetchAll();
+$cat_stmt = $pdo->query("SELECT main_category, subcategory, COUNT(*) as count FROM products GROUP BY main_category, subcategory ORDER BY main_category ASC");
+$raw_categories = $cat_stmt->fetchAll();
+$db_categories = [];
+foreach ($raw_categories as $row) {
+    if (!isset($db_categories[$row['main_category']])) {
+        $db_categories[$row['main_category']] = [];
+    }
+    $db_categories[$row['main_category']][] = $row;
+}
 
 $brand_stmt = $pdo->query("SELECT brand, COUNT(*) as count FROM products GROUP BY brand");
 $db_brands = $brand_stmt->fetchAll();
@@ -52,22 +59,24 @@ $db_brands = $brand_stmt->fetchAll();
                     </div>
 
                     <!-- Categories -->
+                    <?php foreach ($db_categories as $mainCat => $subs): ?>
                     <div class="filter-group">
                         <div class="filter-header" onclick="toggleFilterGroup(this)">
-                            <span>Category</span>
+                            <span><?php echo htmlspecialchars($mainCat ?: 'Others'); ?></span>
                             <i class="fas fa-chevron-down"></i>
                         </div>
-                        <div class="filter-content scroll-mini">
-                            <?php foreach($db_categories as $cat_row): 
-                                $cat = $cat_row['category'];
+                        <div class="filter-content scroll-mini show">
+                            <?php foreach($subs as $sub_row): 
+                                $sub = $sub_row['subcategory'];
                             ?>
                             <label class="filter-label">
-                                <input type="checkbox" name="category" value="<?php echo $cat; ?>" onchange="filterProducts()">
-                                <span><?php echo $cat; ?></span>
+                                <input type="checkbox" name="category" value="<?php echo htmlspecialchars($sub); ?>" onchange="filterProducts()">
+                                <span><?php echo htmlspecialchars($sub); ?></span>
                             </label>
                             <?php endforeach; ?>
                         </div>
                     </div>
+                    <?php endforeach; ?>
 
                     <!-- Price -->
                     <div class="filter-group">
@@ -233,12 +242,37 @@ $db_brands = $brand_stmt->fetchAll();
         const groupParam = urlParams.get('group');
         if (groupParam === 'pcs') {
             // Flexible PC categories list - add any new subcategories here
-            const pcCategories = ['Laptops', 'Personal Computers', 'Workstations', 'Desktops'];
+            const pcCategories = ['Personal Computers', 'Workstations', 'Gaming PCs', 'Office PCs', 'All-in-One PCs'];
             
             document.querySelectorAll('input[name="category"]').forEach(cb => {
                 if (pcCategories.map(c => c.toLowerCase()).includes(cb.value.toLowerCase())) {
                     cb.checked = true;
                     const content = cb.closest('.filter-content');
+                    if (content) content.classList.add('show');
+                }
+            });
+        } else if (groupParam === 'laptops') {
+            const laptopCategories = ['Gaming Laptops', 'Business Laptops', 'Student Laptops', 'Creator Laptops'];
+            
+            document.querySelectorAll('input[name="category"]').forEach(cb => {
+                if (laptopCategories.map(c => c.toLowerCase()).includes(cb.value.toLowerCase())) {
+                    cb.checked = true;
+                    const content = cb.closest('.filter-content');
+                    if (content) content.classList.add('show');
+                }
+            });
+        }
+
+        // 3. Main Category Filtering (e.g., ?main_category=Components)
+        const mainCatParam = urlParams.get('main_category');
+        if (mainCatParam) {
+            document.querySelectorAll('.filter-group').forEach(group => {
+                const header = group.querySelector('.filter-header span');
+                if (header && header.innerText.trim().toLowerCase() === mainCatParam.toLowerCase()) {
+                    group.querySelectorAll('input[name="category"]').forEach(cb => {
+                        cb.checked = true;
+                    });
+                    const content = group.querySelector('.filter-content');
                     if (content) content.classList.add('show');
                 }
             });
