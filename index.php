@@ -42,7 +42,7 @@ if(count($testimonials) == 0) {
                                 <p style="font-size: 22px; margin-bottom: 45px; opacity: 0.9; font-weight: 300; max-width: 700px; margin-left: auto; margin-right: auto;" class="fade-in-up">Premium PCs & Expert Service Engineered for Perfection.</p>
                                 
                                 <div class="fade-in-up" style="display: flex; gap: 24px; justify-content: center;">
-                                    <a href="<?php echo $b['link'] ?: 'personal-computers.php'; ?>" class="btn btn-primary" style="padding: 20px 50px;">Explore Store <i class="fas fa-shopping-cart"></i></a>
+                                    <a href="<?php echo $b['link'] ?: 'products.php'; ?>" class="btn btn-primary" style="padding: 20px 50px;">Explore Store <i class="fas fa-shopping-cart"></i></a>
                                     <a href="get-quote.php" class="btn btn-outline" style="padding: 20px 50px; border-color: white; color: white;">Get a Quote <i class="fas fa-file-invoice"></i></a>
                                 </div>
                             </div>
@@ -56,7 +56,7 @@ if(count($testimonials) == 0) {
                         <div class="banner-content" style="position: relative; z-index: 2; text-align: center; color: white;">
                             <h1 style="color: white; margin-bottom: 25px;">Need for Intelligence.</h1>
                             <p style="font-size: 22px; opacity: 0.8; margin-bottom: 45px; font-weight: 300;">Premium PCs & Expert Service in One Place</p>
-                            <a href="personal-computers.php" class="btn btn-primary" style="padding: 20px 60px;">Browse Collections</a>
+                            <a href="products.php" class="btn btn-primary" style="padding: 20px 60px;">Browse Collections</a>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -76,12 +76,12 @@ if(count($testimonials) == 0) {
             <div class="grid-main">
                 <?php 
                 $cats = [
-                    ['name' => 'Workstations', 'file' => 'personal-computers.php', 'icon' => 'fa-desktop', 'img' => 'https://i.pinimg.com/1200x/be/33/08/be3308ae1c7af201936851c8ce917a9e.jpg', 'desc' => 'High-end workstation systems for professionals.'],
-                    ['name' => 'Laptops', 'file' => 'laptops.php', 'icon' => 'fa-laptop', 'img' => 'https://i.pinimg.com/736x/9f/34/d7/9f34d789f664aba97f6e1326498eb2c3.jpg', 'desc' => 'Thin, light and powerful portable machines.'],
-                    ['name' => 'Custom Builds', 'file' => 'custom-builds.php', 'icon' => 'fa-gamepad', 'img' => 'https://i.pinimg.com/1200x/41/4e/bf/414ebfd869351533e6ea13af555bb988.jpg', 'desc' => 'Tailored gaming rigs built for performance.'],
-                    ['name' => 'Components', 'file' => 'components.php', 'icon' => 'fa-microchip', 'img' => 'https://i.pinimg.com/736x/b2/23/e0/b223e0871a72dcff75483a7758a46371.jpg', 'desc' => 'The best hardware to upgrade your rig.'],
+                    ['name' => 'Workstations', 'file' => 'products.php?category=Workstations', 'icon' => 'fa-desktop', 'img' => 'https://i.pinimg.com/1200x/be/33/08/be3308ae1c7af201936851c8ce917a9e.jpg', 'desc' => 'High-end workstation systems for professionals.'],
+                    ['name' => 'Laptops', 'file' => 'products.php?category=Laptops', 'icon' => 'fa-laptop', 'img' => 'https://i.pinimg.com/736x/9f/34/d7/9f34d789f664aba97f6e1326498eb2c3.jpg', 'desc' => 'Thin, light and powerful portable machines.'],
+                    ['name' => 'Custom Builds', 'file' => 'products.php?category=Custom%20PCs', 'icon' => 'fa-gamepad', 'img' => 'https://i.pinimg.com/1200x/41/4e/bf/414ebfd869351533e6ea13af555bb988.jpg', 'desc' => 'Tailored gaming rigs built for performance.'],
+                    ['name' => 'Components', 'file' => 'products.php?category=Components', 'icon' => 'fa-microchip', 'img' => 'https://i.pinimg.com/736x/b2/23/e0/b223e0871a72dcff75483a7758a46371.jpg', 'desc' => 'The best hardware to upgrade your rig.'],
                     ['name' => 'Services', 'file' => 'services.php', 'icon' => 'fa-tools', 'img' => 'https://i.pinimg.com/736x/aa/97/26/aa9726ec3cd7460f4d6aa428d07eb500.jpg', 'desc' => 'Expert repair and support for all devices.'],
-                    ['name' => 'Peripherals', 'file' => 'printers-peripherals.php', 'icon' => 'fa-print', 'img' => 'https://i.pinimg.com/736x/e5/c5/fd/e5c5fd7ad7ccf53c35d3010f91e66e7c.jpg', 'desc' => 'Essential gear for your digital lifestyle.']
+                    ['name' => 'Peripherals', 'file' => 'products.php?category=Printers%20%26%20Peripherals', 'icon' => 'fa-print', 'img' => 'https://i.pinimg.com/736x/e5/c5/fd/e5c5fd7ad7ccf53c35d3010f91e66e7c.jpg', 'desc' => 'Essential gear for your digital lifestyle.']
                 ];
                 foreach($cats as $index => $c):
                 ?>
@@ -174,7 +174,7 @@ if(count($testimonials) == 0) {
                     <h2 class="gradient-text">Latest in Inventory</h2>
                     <p>Experience the cutting-edge of performance computing.</p>
                 </div>
-                <a href="personal-computers.php" class="btn btn-outline fade-in-up">Browse All Gear <i class="fas fa-arrow-right"></i></a>
+                <a href="products.php" class="btn btn-outline fade-in-up">Browse All Gear <i class="fas fa-arrow-right"></i></a>
             </div>
             
             <div class="grid-main" style="grid-template-columns: repeat(4, 1fr);">

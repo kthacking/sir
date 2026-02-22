@@ -95,9 +95,10 @@ if (!isset($_SESSION['cart'])) {
     </div>
     <ul class="nav-links">
         <li><a href="<?php echo $base_url; ?>index.php">Home</a></li>
-        <li><a href="<?php echo $base_url; ?>personal-computers.php">PCs</a></li>
-        <li><a href="<?php echo $base_url; ?>laptops.php">Laptops</a></li>
-        <li><a href="<?php echo $base_url; ?>custom-builds.php">Custom Builds</a></li>
+        <li><a href="<?php echo $base_url; ?>products.php">Shop All</a></li>
+        <li><a href="<?php echo $base_url; ?>products.php?category=Workstations">PCs</a></li>
+        <li><a href="<?php echo $base_url; ?>products.php?category=Laptops">Laptops</a></li>
+        <li><a href="<?php echo $base_url; ?>pc-builder.php">Custom Builds</a></li>
         <li><a href="<?php echo $base_url; ?>services.php">Services</a></li>
     </ul>
     <div style="display: flex; align-items: center; gap: 20px;">

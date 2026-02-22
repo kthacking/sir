@@ -7,18 +7,18 @@
         <div>
             <h4 style="margin-bottom: 25px; font-weight: 600;">Shop & Build</h4>
             <ul style="list-style: none; line-height: 2.2;">
-                <li><a href="<?php echo $base_url; ?>shop/index.php" style="color: var(--text-grey); text-decoration: none; font-size: 14px;">Browse Store</a></li>
-                <li><a href="<?php echo $base_url; ?>shop/index.php?cat=laptops" style="color: var(--text-grey); text-decoration: none; font-size: 14px;">Laptops</a></li>
-                <li><a href="<?php echo $base_url; ?>shop/index.php?cat=workstations" style="color: var(--text-grey); text-decoration: none; font-size: 14px;">Workstations</a></li>
-                <li><a href="<?php echo $base_url; ?>pc-builder/" style="color: var(--text-grey); text-decoration: none; font-size: 14px;">Custom PC Builder</a></li>
+                <li><a href="<?php echo $base_url; ?>products.php" style="color: var(--text-grey); text-decoration: none; font-size: 14px;">Browse Store</a></li>
+                <li><a href="<?php echo $base_url; ?>products.php?category=Laptops" style="color: var(--text-grey); text-decoration: none; font-size: 14px;">Laptops</a></li>
+                <li><a href="<?php echo $base_url; ?>products.php?category=Workstations" style="color: var(--text-grey); text-decoration: none; font-size: 14px;">Workstations</a></li>
+                <li><a href="<?php echo $base_url; ?>pc-builder.php" style="color: var(--text-grey); text-decoration: none; font-size: 14px;">Custom PC Builder</a></li>
             </ul>
         </div>
         <div>
             <h4 style="margin-bottom: 25px; font-weight: 600;">Service Hub</h4>
             <ul style="list-style: none; line-height: 2.2;">
-                <li><a href="<?php echo $base_url; ?>services/track.php" style="color: var(--text-grey); text-decoration: none; font-size: 14px;">Track Repair</a></li>
-                <li><a href="<?php echo $base_url; ?>services/book.php" style="color: var(--text-grey); text-decoration: none; font-size: 14px;">Book a Service</a></li>
-                <li><a href="<?php echo $base_url; ?>services/index.php" style="color: var(--text-grey); text-decoration: none; font-size: 14px;">AMC Information</a></li>
+                <li><a href="<?php echo $base_url; ?>track-repair.php" style="color: var(--text-grey); text-decoration: none; font-size: 14px;">Track Repair</a></li>
+                <li><a href="<?php echo $base_url; ?>book-service.php" style="color: var(--text-grey); text-decoration: none; font-size: 14px;">Book a Service</a></li>
+                <li><a href="<?php echo $base_url; ?>services.php" style="color: var(--text-grey); text-decoration: none; font-size: 14px;">AMC Information</a></li>
                 <li><a href="<?php echo $base_url; ?>get-quote.php" style="color: var(--text-grey); text-decoration: none; font-size: 14px;">Bulk Order Quote</a></li>
             </ul>
         </div>
