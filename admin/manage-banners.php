@@ -128,7 +128,7 @@ $banners = $stmt->fetchAll();
     </div>
 
     <!-- Banner Modal -->
-    <div id="bannerModal" class="modal">
+    <div id="bannerModal" class="modal" style="display:none">
         <div class="modal-content" style="width: 600px;">
             <h2 style="margin-bottom: 25px;">Banner Configuration</h2>
             <form action="manage-banners.php" method="POST" enctype="multipart/form-data">

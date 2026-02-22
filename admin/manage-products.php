@@ -201,7 +201,7 @@ foreach ($all_categories as $c) {
     </div>
 
     <!-- Modal for Add/Edit -->
-    <div id="productModal" class="modal">
+    <div id="productModal" class="modal" style="display:none">
         <div class="modal-content" style="width: 700px; max-width: 95%;">
             <h2 style="margin-bottom: 25px;">Product Information</h2>
             <form action="manage-products.php" method="POST" enctype="multipart/form-data">
