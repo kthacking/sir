@@ -185,7 +185,7 @@ window.addEventListener("load", function() {
     <style>
         .inventory-showcase-section {
             position: relative;
-            padding: 48px 0;
+            padding: 50px 0;
             background: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop') center center no-repeat;
             background-size: cover;
             min-height: 480px;
@@ -212,11 +212,12 @@ window.addEventListener("load", function() {
             z-index: 2;
             display: flex;
             align-items: center;
-            gap: 25px;
+            gap: 30px;
+            width: 100%;
         }
 
         .inventory-header {
-            flex: 0 0 32%; /* Balanced for 35/65 approx */
+            flex: 0 0 300px; /* Fixed width for text area */
             z-index: 10;
         }
 
@@ -230,11 +231,11 @@ window.addEventListener("load", function() {
         }
 
         .showcase-subtitle {
-            font-size: 12px;
+            font-size: 13px;
             opacity: 0.7;
             line-height: 1.4;
-            margin-bottom: 18px;
-            max-width: 90%;
+            margin-bottom: 20px;
+            max-width: 250px;
         }
 
         .showcase-controls {
@@ -245,14 +246,14 @@ window.addEventListener("load", function() {
 
         .carousel-arrows {
             display: flex;
-            gap: 8px;
+            gap: 10px;
         }
 
         .arrow-btn {
-            width: 36px;
-            height: 36px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.15);
             background: rgba(255,255,255,0.05);
             color: white;
             display: flex;
@@ -270,60 +271,64 @@ window.addEventListener("load", function() {
         }
 
         .inventory-carousel-wrapper {
-            flex: 0 0 68%;
+            flex: 1;
             position: relative;
             display: flex;
             align-items: center;
-            overflow: visible;
+            min-width: 0; /* Important for flex child to shrink */
         }
 
         .portal-glow-line {
             position: absolute;
             left: -5px;
-            top: 20px;
-            bottom: 20px;
+            top: 15%;
+            bottom: 15%;
             width: 3px;
             background: #fff;
             box-shadow: 0 0 15px #0071e3, 0 0 30px #0071e3;
             z-index: 5;
             border-radius: 10px;
             opacity: 0.8;
+            pointer-events: none;
         }
 
         .portal-gradient-left {
             position: absolute;
-            left: -100px;
+            left: 0;
             top: 0;
             bottom: 0;
-            width: 150px;
-            background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 100%);
+            width: 100px;
+            background: linear-gradient(90deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 100%);
             z-index: 4;
             pointer-events: none;
-            backdrop-filter: blur(0px); /* Will be handled by JS */
         }
 
         .inventory-carousel-container {
             width: 100%;
-            overflow: visible;
-            mask-image: linear-gradient(to right, transparent 0%, black 15%, black 100%);
-            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 100%);
+            overflow: hidden; /* Prevent horizontal spill */
+            mask-image: linear-gradient(to right, transparent 0%, black 10%, black 100%);
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 100%);
         }
 
         .inventory-carousel {
             display: flex;
-            gap: 12px;
+            gap: 15px;
             overflow-x: auto;
+            overflow-y: hidden;
             scroll-snap-type: x mandatory;
             padding: 20px 0;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
+            padding-left: 20px; /* Space for portal line */
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
             scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
         }
 
         .inventory-carousel::-webkit-scrollbar { display: none; }
 
         .inventory-card-item {
-            flex: 0 0 260px;
+            flex: 0 0 280px; /* Fixed card width */
+            min-width: 280px;
             scroll-snap-align: start;
             transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s, filter 0.4s;
             transform-origin: center;
@@ -336,7 +341,7 @@ window.addEventListener("load", function() {
             -webkit-backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 14px;
-            padding: 14px;
+            padding: 16px;
             height: 380px;
             display: flex;
             flex-direction: column;
@@ -358,24 +363,28 @@ window.addEventListener("load", function() {
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            padding: 10px;
+            padding: 12px;
             background: radial-gradient(circle at center, #ffffff 0%, #f4f4f6 100%);
         }
 
         .showcase-img {
-            max-width: 82%;
-            max-height: 82%;
+            max-width: 85%;
+            max-height: 85%;
             object-fit: contain;
             transition: transform 0.5s ease;
         }
 
+        .glass-showcase-card:hover .showcase-img {
+            transform: scale(1.05);
+        }
+
         .card-brand-tag {
-            font-size: 8px;
+            font-size: 9px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.8px;
+            letter-spacing: 1px;
             opacity: 0.6;
-            margin-bottom: 3px;
+            margin-bottom: 5px;
             display: block;
         }
 
@@ -384,8 +393,8 @@ window.addEventListener("load", function() {
             font-weight: 700;
             color: white;
             margin-bottom: auto;
-            line-height: 1.25;
-            max-height: 33px;
+            line-height: 1.3;
+            max-height: 34px;
             overflow: hidden;
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -396,18 +405,18 @@ window.addEventListener("load", function() {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 8px;
+            margin-top: 10px;
         }
 
         .card-price {
-            font-size: 17px;
+            font-size: 18px;
             font-weight: 800;
             color: white;
         }
 
         .card-action-mini {
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
             background: white;
             color: black;
             border-radius: 50%;
@@ -416,7 +425,7 @@ window.addEventListener("load", function() {
             justify-content: center;
             text-decoration: none;
             transition: all 0.3s;
-            font-size: 10px;
+            font-size: 11px;
         }
 
         .card-action-mini:hover {
@@ -425,35 +434,64 @@ window.addEventListener("load", function() {
         }
 
         @media (max-width: 1200px) {
-            .inventory-showcase-section { padding: 32px 0; min-height: auto; max-height: none; }
-            .inventory-content-wrapper { flex-direction: column; align-items: flex-start; gap: 15px; }
-            .inventory-header, .inventory-carousel-wrapper { flex: none; width: 100%; }
-            .showcase-title { font-size: 28px; }
+            .inventory-showcase-section { padding: 40px 0; min-height: auto; max-height: none; }
+            .inventory-content-wrapper { flex-direction: column; align-items: flex-start; gap: 25px; }
+            .inventory-header { flex: none; width: 100%; }
+            .inventory-carousel-wrapper { flex: none; width: 100%; }
+            .showcase-subtitle { max-width: 100%; }
             .portal-glow-line { display: none; }
             .inventory-carousel-container { mask-image: none; -webkit-mask-image: none; }
+            .inventory-carousel { padding-left: 0; }
         }
 
         @media (max-width: 768px) {
-            .inventory-card-item { flex: 0 0 220px; }
-            .glass-showcase-card { height: 340px; }
-            .card-img-wrapper { height: 140px; }
+            .inventory-card-item { flex: 0 0 240px; min-width: 240px; }
+            .glass-showcase-card { height: 350px; }
+            .card-img-wrapper { height: 160px; }
+        }
+    </style>
+
+    <style>
+        /* Tweak for continuous movement - disable snap during auto */
+        .inventory-carousel.auto-moving {
+            scroll-snap-type: none !important;
+            scroll-behavior: auto !important;
         }
     </style>
 
     <script>
-        function scrollInventory(direction) {
-            const carousel = document.getElementById('inventory-carousel');
-            const scrollAmount = 272; 
-            carousel.scrollBy({
-                left: direction * scrollAmount,
-                behavior: 'smooth'
-            });
+        const carousel = document.getElementById('inventory-carousel');
+        let cards = document.querySelectorAll('.inventory-card-item');
+        let scrollPos = 0;
+        let isPaused = false;
+        let animationId;
+        const scrollSpeed = 0.6; // Buttery smooth speed
+
+        function setupInfiniteLoop() {
+            // Clone twice for extra buffer
+            const originalContent = carousel.innerHTML;
+            carousel.innerHTML += originalContent + originalContent;
+            cards = document.querySelectorAll('.inventory-card-item');
+            
+            // Start from the first clone set
+            carousel.scrollLeft = 0;
+            scrollPos = 0;
         }
 
-        const carousel = document.getElementById('inventory-carousel');
-        const cards = document.querySelectorAll('.inventory-card-item');
+        function updatePortalAndLoop() {
+            if (!isPaused) {
+                scrollPos += scrollSpeed;
+                carousel.scrollLeft = scrollPos;
 
-        function updatePortalEffect() {
+                // Seamless Loop Reset
+                const oneSetWidth = carousel.scrollWidth / 3;
+                if (scrollPos >= oneSetWidth * 2) {
+                    scrollPos -= oneSetWidth;
+                    carousel.scrollLeft = scrollPos;
+                }
+            }
+
+            // Update Effects
             const carouselRect = carousel.getBoundingClientRect();
             const centerX = carouselRect.left + carouselRect.width / 2;
 
@@ -461,41 +499,73 @@ window.addEventListener("load", function() {
                 const cardRect = card.getBoundingClientRect();
                 const cardCenter = cardRect.left + cardRect.width / 2;
                 
-                // Portal Exit (Left Edge)
                 const distanceFromLeft = cardRect.left - carouselRect.left;
-                const portalThreshold = 150;
+                const portalThreshold = 180;
                 
-                let blur = 0;
-                let opacity = 1;
-                let scale = 1;
+                let blur = 0, opacity = 1, scale = 1;
 
                 if (distanceFromLeft < portalThreshold) {
-                    const factor = 1 - (distanceFromLeft / portalThreshold);
-                    blur = factor * 10;
-                    opacity = 1 - (factor * 0.7);
-                    scale = 1 - (factor * 0.1);
+                    const factor = Math.max(0, 1 - (distanceFromLeft / portalThreshold));
+                    blur = factor * 12;
+                    opacity = 1 - (factor * 0.85);
+                    scale = 0.95 - (factor * 0.1);
                 }
 
-                // Depth Scaling (Center focus)
                 const distanceToCenter = Math.abs(centerX - cardCenter);
                 const maxDistance = carouselRect.width;
-                const centerFactor = 1 - (distanceToCenter / maxDistance);
+                const centerFactor = Math.max(0, 1 - (distanceToCenter / (maxDistance * 0.8)));
                 
-                // If not in portal zone, apply center elevation
                 if (distanceFromLeft >= portalThreshold) {
-                    scale = 0.95 + (centerFactor * 0.1);
+                    scale = 0.94 + (centerFactor * 0.1);
                 }
 
                 card.style.filter = `blur(${blur}px)`;
                 card.style.opacity = opacity;
                 card.style.transform = `scale(${scale})`;
             });
+
+            animationId = requestAnimationFrame(updatePortalAndLoop);
         }
 
-        carousel.addEventListener('scroll', updatePortalEffect);
-        window.addEventListener('resize', updatePortalEffect);
-        // Initial run
-        setTimeout(updatePortalEffect, 100);
+        function scrollInventory(direction) {
+            isPaused = true;
+            const step = 295 * direction;
+            carousel.classList.remove('auto-moving');
+            
+            carousel.scrollBy({
+                left: step,
+                behavior: 'smooth'
+            });
+
+            // Resume auto-scroll after a delay
+            setTimeout(() => {
+                scrollPos = carousel.scrollLeft;
+                isPaused = false;
+                carousel.classList.add('auto-moving');
+            }, 1500);
+        }
+
+        carousel.addEventListener('mouseenter', () => {
+            isPaused = true;
+            carousel.classList.remove('auto-moving');
+        });
+        
+        carousel.addEventListener('mouseleave', () => {
+            scrollPos = carousel.scrollLeft;
+            isPaused = false;
+            carousel.classList.add('auto-moving');
+        });
+
+        // Initialize
+        setTimeout(() => {
+            setupInfiniteLoop();
+            carousel.classList.add('auto-moving');
+            updatePortalAndLoop();
+        }, 500);
+
+        window.addEventListener('resize', () => {
+            scrollPos = carousel.scrollLeft;
+        });
     </script>
         </div>
     </section>
