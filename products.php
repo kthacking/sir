@@ -16,8 +16,8 @@ $brand_stmt = $pdo->query("SELECT brand, COUNT(*) as count FROM products GROUP B
 $db_brands = $brand_stmt->fetchAll();
 ?>
 
-<main style="padding-top: 100px; background-color: #f5f7fa; min-height: 100vh;">
-    <div class="container" style="max-width: 1300px; margin: 0 auto; padding: 0 20px;">
+<main style="padding-top: 108px; background: var(--bg); min-height: 100vh;">
+    <div class="container" style="max-width: 1100px; margin: 0 auto; padding: 28px 32px 72px;">
         
         <!-- Breadcrumb & Minimal Title Section -->
         <div style="margin-bottom: 32px;" class="fade-in-up">
@@ -295,17 +295,36 @@ $db_brands = $brand_stmt->fetchAll();
 </script>
 
 <style>
-    /* Professional Spacing & Minimalist Look */
+    /* ═══════════════════════════════════════════════════
+       PRODUCTS PAGE — Minimal Editorial Theme
+       ═══════════════════════════════════════════════════ */
+
+    /* ── Filter Sidebar ────────────────────────────────── */
     .filter-sidebar {
-        width: 250px;
+        width: 240px;
         flex-shrink: 0;
         position: sticky;
-        top: 100px;
+        top: 108px;
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
         z-index: 10;
     }
 
+    /* Sidebar scrollbar */
+    .filter-sidebar::-webkit-scrollbar { width: 3px; }
+    .filter-sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+    /* Inner card */
+    .filter-sidebar > div {
+        background: var(--bg-white) !important;
+        border-radius: var(--radius-lg) !important;
+        border: 1px solid var(--border) !important;
+        padding: 20px !important;
+        box-shadow: none !important;
+    }
+
     .filter-group {
-        border-bottom: 1px solid #f3f4f6;
+        border-bottom: 1px solid var(--border);
         padding-bottom: 12px;
         margin-bottom: 12px;
     }
@@ -315,31 +334,47 @@ $db_brands = $brand_stmt->fetchAll();
         justify-content: space-between;
         align-items: center;
         cursor: pointer;
-        font-size: 13px;
-        font-weight: 600;
-        color: #111827;
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text-dark);
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
         padding: 4px 0;
+        transition: color 0.2s;
     }
 
-    .filter-header i { 
-        font-size: 10px; 
-        transition: transform 0.3s ease; 
-        color: #9ca3af;
+    .filter-header:hover { color: var(--accent); }
+
+    .filter-header i {
+        font-size: 9px;
+        transition: transform 0.3s ease;
+        color: var(--text-muted);
+    }
+
+    /* Clear All button */
+    .filter-sidebar button[onclick="clearAllFilters()"] {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--accent) !important;
+        background: none;
+        border: none;
+        cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
     .filter-content {
         max-height: 0;
         overflow: hidden;
-        transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
+        transition: max-height 0.35s ease;
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 6px;
     }
 
     .filter-content.show {
         max-height: 500px;
-        padding-top: 12px;
-        transition: max-height 0.4s ease-in;
+        padding-top: 10px;
     }
 
     .filter-label {
@@ -347,93 +382,141 @@ $db_brands = $brand_stmt->fetchAll();
         align-items: center;
         gap: 10px;
         font-size: 13px;
-        color: #4b5563;
+        color: var(--text-mid);
         cursor: pointer;
         transition: color 0.2s;
     }
 
-    .filter-label:hover { color: #2563eb; }
+    .filter-label:hover { color: var(--text-dark); }
 
     .filter-label input[type="checkbox"] {
-        width: 16px;
-        height: 16px;
+        width: 15px;
+        height: 15px;
         border-radius: 4px;
-        border: 1px solid #d1d5db;
-        accent-color: #2563eb;
+        accent-color: var(--accent);
+        cursor: pointer;
     }
 
+    /* Price range accent */
+    input[type="range"] { accent-color: var(--text-dark) !important; }
+    #priceValue { color: var(--accent) !important; font-weight: 700; }
+
+    /* ── Mobile filter button ───────────────────────────── */
+    #mobileFilterBtn {
+        background: var(--bg-white) !important;
+        border: 1px solid var(--border) !important;
+        color: var(--text-dark) !important;
+        border-radius: var(--radius-md) !important;
+        font-family: 'Manrope', sans-serif !important;
+        font-weight: 600 !important;
+    }
+
+    /* ── Sort dropdown ──────────────────────────────────── */
+    #sortOrder {
+        background: var(--bg-white) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: var(--radius-md) !important;
+        color: var(--text-dark) !important;
+        font-family: 'Manrope', sans-serif !important;
+        font-size: 13px !important;
+        font-weight: 500;
+        transition: border-color 0.2s;
+    }
+
+    #sortOrder:focus { border-color: var(--text-dark) !important; }
+
+    /* ── Breadcrumb ─────────────────────────────────────── */
+    .breadcrumb-list {
+        display: flex;
+        gap: 6px;
+        list-style: none;
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-bottom: 16px;
+    }
+    .breadcrumb-list a { color: var(--text-muted); text-decoration: none; }
+    .breadcrumb-list a:hover { color: var(--text-dark); }
+    .breadcrumb-list .current { color: var(--text-dark); font-weight: 600; }
+
+    /* ── Product Grid ───────────────────────────────────── */
     .lean-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 20px;
+        grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+        gap: 16px;
         width: 100%;
     }
 
-    /* Premium App-Style Product Card */
+    /* ── Product Card ───────────────────────────────────── */
     .product-card-premium {
-        background: #ffffff;
-        border-radius: 20px;
+        background: var(--bg-white);
+        border-radius: var(--radius-lg);
         padding: 16px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        border: 1px solid var(--border);
+        transition: border-color 0.25s var(--ease), box-shadow 0.25s var(--ease), transform 0.25s var(--ease);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         height: 100%;
         position: relative;
-        border: 1px solid #f1f1f4;
+        box-shadow: none;
     }
 
     .product-card-premium:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+        border-color: #333;
+        box-shadow: var(--shadow-md);
+        transform: translateY(-3px);
     }
 
+    /* ── Product Image ──────────────────────────────────── */
     .premium-img-container {
-        height: 180px;
+        height: 170px;
         width: 100%;
-        border-radius: 16px;
+        border-radius: var(--radius-md);
         overflow: hidden;
-        margin-bottom: 0;
-        background: #f9fafb;
-        position: relative;
+        background: var(--bg);
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 12px;
+        margin-bottom: 0;
     }
 
     .premium-img-container img {
         max-width: 100%;
         max-height: 100%;
         object-fit: contain;
-        transition: transform 0.5s ease;
+        transition: transform 0.4s var(--ease);
     }
 
     .product-card-premium:hover .premium-img-container img {
-        transform: scale(1.05);
+        transform: scale(1.06);
     }
 
+    /* ── Product Tag / Label ────────────────────────────── */
     .premium-tag {
-        background: #f3f4f6;
-        color: #4b5563;
-        padding: 5px 12px;
-        border-radius: 8px;
-        font-size: 11px;
-        font-weight: 600;
+        background: var(--bg);
+        color: var(--text-muted);
+        padding: 4px 10px;
+        border-radius: var(--radius-sm);
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border: 1px solid var(--border);
     }
 
+    /* ── Product Action Button ──────────────────────────── */
     .premium-btn {
-        background: #1d1d1f;
+        background: var(--text-dark);
         color: white;
-        height: 34px;
-        border-radius: 10px;
-        padding: 0 20px;
+        height: 36px;
+        border-radius: var(--radius-md);
+        padding: 0 16px;
         font-size: 11px;
-        font-weight: 600;
+        font-weight: 700;
         border: none;
         cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: background 0.2s var(--ease), transform 0.2s;
         text-decoration: none;
         display: inline-flex;
         align-items: center;
@@ -441,40 +524,51 @@ $db_brands = $brand_stmt->fetchAll();
         white-space: nowrap;
         letter-spacing: 0.5px;
         text-transform: uppercase;
+        font-family: 'Manrope', sans-serif;
     }
 
     .premium-btn:hover {
-        background: var(--primary, #0071e3);
-        transform: scale(1.05);
-        box-shadow: 0 4px 12px rgba(0, 113, 227, 0.2);
+        background: var(--accent);
+        transform: translateY(-1px);
+        color: #fff;
     }
 
-    .lean-btn-primary:hover { background: #1d4ed8; }
-    .lean-btn-primary[disabled] { background: #9ca3af; cursor: not-allowed; }
+    .lean-btn-primary[disabled] {
+        background: var(--border);
+        color: var(--text-muted);
+        cursor: not-allowed;
+    }
 
+    /* ── Pagination ─────────────────────────────────────── */
     .lean-page-btn {
         padding: 8px 14px;
-        border-radius: 8px;
-        border: 1px solid #e5e7eb;
-        background: white;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--border);
+        background: var(--bg-white);
+        color: var(--text-dark);
         font-size: 13px;
         font-weight: 600;
         cursor: pointer;
-        transition: all 0.2s;
+        transition: all 0.2s var(--ease);
+        font-family: 'Manrope', sans-serif;
     }
+
+    .lean-page-btn:hover { border-color: var(--text-dark); }
+
     .lean-page-btn.active {
-        background: #2563eb;
+        background: var(--text-dark);
         color: white;
-        border-color: #2563eb;
+        border-color: var(--text-dark);
     }
 
-    .scroll-mini::-webkit-scrollbar { width: 4px; }
-    .scroll-mini::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
+    /* ── Sidebar mini scrollbar ─────────────────────────── */
+    .scroll-mini::-webkit-scrollbar { width: 3px; }
+    .scroll-mini::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
 
-    @media (max-width: 1024px) {
-        /* Filter sidebar mobile logic remains */
-    }
+    /* ── Loading spinner ────────────────────────────────── */
+    .fa-circle-notch { color: var(--accent) !important; }
 
+    /* ── Responsive ─────────────────────────────────────── */
     @media (max-width: 992px) {
         .filter-sidebar {
             position: fixed;
@@ -482,19 +576,24 @@ $db_brands = $brand_stmt->fetchAll();
             left: -280px;
             height: 100vh;
             width: 280px;
-            background: white;
+            background: var(--bg-white);
             padding: 24px;
-            transition: left 0.4s var(--transition);
-            box-shadow: 20px 0 50px rgba(0,0,0,0.1);
+            transition: left 0.35s var(--ease);
+            box-shadow: var(--shadow-lg);
             overflow-y: auto;
+            max-height: 100vh;
+            z-index: 1100;
         }
         .filter-sidebar.mobile-open { left: 0; }
         #mobileFilterBtn { display: flex !important; }
     }
 
     @media (max-width: 640px) {
+        .lean-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 420px) {
         .lean-grid { grid-template-columns: 1fr; }
-        .product-card-lean { padding: 12px; }
     }
 </style>
 

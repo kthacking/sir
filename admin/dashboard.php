@@ -90,7 +90,7 @@ $recent_orders = $stmt->fetchAll();
                         <td><strong>#ORD-<?php echo $order['id']; ?></strong></td>
                         <td><?php echo htmlspecialchars($order['customer_name']); ?></td>
                         <td><?php echo date('M d, Y', strtotime($order['created_at'])); ?></td>
-                        <td>₹<?php echo number_format($order['total_amount']); ?></td>
+                        <td>₹<?php echo number_format($order['total']); ?></td>
                         <td><span class="status-badge badge-success"><?php echo ucfirst($order['status']); ?></span></td>
                     </tr>
                     <?php endforeach; ?>

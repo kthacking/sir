@@ -3,7 +3,7 @@ include_once '../includes/config.php';
 requireAdmin();
 
 // Fetch summary metrics
-$stmt = $pdo->query("SELECT SUM(total_amount) FROM orders");
+$stmt = $pdo->query("SELECT SUM(total) FROM orders");
 $total_revenue = $stmt->fetchColumn() ?: 0;
 
 $stmt = $pdo->query("SELECT COUNT(*) FROM orders");

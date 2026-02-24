@@ -16,6 +16,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
             </a>
         </li>
         <li class="nav-item">
+            <a href="manage-pc-builder.php" class="nav-link <?php echo $current_page == 'manage-pc-builder.php' ? 'active' : ''; ?>">
+                <i class="fas fa-microchip"></i> PC Builder
+            </a>
+        </li>
+        <li class="nav-item">
             <a href="manage-services.php" class="nav-link <?php echo $current_page == 'manage-services.php' ? 'active' : ''; ?>">
                 <i class="fas fa-tools"></i> Services
             </a>

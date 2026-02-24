@@ -27,6 +27,70 @@ if(count($testimonials) == 0) {
     ];
 }
 ?>
+<style>
+/* ── Index Page Design Overrides ──────────────────────────── */
+
+/* Hero / Banner section top padding */
+.banner-section { padding-top: 100px !important; background: var(--bg) !important; }
+
+/* Category / glass cards on index */
+.glass-card-pro {
+    border-radius: var(--radius-lg) !important;
+    border: 1px solid var(--border) !important;
+    transition: border-color 0.25s var(--ease), box-shadow 0.25s var(--ease) !important;
+}
+.glass-card-pro:hover {
+    border-color: #333 !important;
+    box-shadow: var(--shadow-md) !important;
+    background: #fff !important;
+}
+
+/* Performance bars */
+.perf-bar-bg { background: var(--border) !important; border-radius: 6px !important; overflow: hidden; height: 4px !important; }
+.perf-bar-fill { height: 4px !important; border-radius: 6px !important; background: var(--text-dark) !important; }
+
+/* Stats section  */
+.stat-number {
+    font-family: 'Manrope', sans-serif !important;
+    font-size: clamp(36px, 5vw, 56px) !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.04em !important;
+    color: var(--text-dark) !important;
+}
+
+/* Brand logo slider */
+.logo-slider { background: var(--bg-white) !important; padding: 24px 0 !important; border-top: 1px solid var(--border) !important; border-bottom: 1px solid var(--border) !important; }
+
+/* Why-choose-us section (black panel at bottom) */
+.why-us-section { background: var(--bg-dark) !important; }
+.why-us-section i    { color: var(--accent) !important; }
+
+/* Builder box refinement inside index */
+.builder-box h2 {
+    font-size: clamp(26px, 4vw, 44px) !important;
+}
+
+/* FPS perf section */
+.fps-perf-box {
+    background: var(--bg) !important;
+    border-radius: var(--radius-md) !important;
+    border: 1px solid var(--border) !important;
+    padding: 24px !important;
+}
+
+/* Inventory / showcase area */
+.glass-showcase-card {
+    border-radius: var(--radius-md) !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+}
+
+/* CTA section on index */
+.index-cta-box {
+    background: var(--bg) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius-xl) !important;
+}
+</style>
 
 <main>
     <!-- Flash Deal Ticker moved to Header -->
@@ -42,7 +106,7 @@ if(count($testimonials) == 0) {
                                 <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 50%; background: linear-gradient(transparent, rgba(0,0,0,0.8));"></div>
                             </div>
                             <div class="banner-content" style="position: relative; z-index: 2; text-align: center; color: white; max-width: 1000px; padding: 0 40px;">
-                                <div class="badge-pro fade-in-up" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);"><?php echo htmlspecialchars($b['subtitle'] ?: 'Exclusive Tech Arrival'); ?></div>
+                                <div class="badge-pro fade-in-up" style="background: rgba(165, 154, 154, 0.37); color: white; border: 1px solid rgba(255,255,255,0.2);"><?php echo htmlspecialchars($b['subtitle'] ?: 'Exclusive Tech Arrival'); ?></div>
                                 <h1 style="color: white; margin-bottom: 30px; line-height: 1;" class="fade-in-up"><?php echo htmlspecialchars($b['title']); ?></h1>
                                 <p style="font-size: 22px; margin-bottom: 45px; opacity: 0.9; font-weight: 300; max-width: 700px; margin-left: auto; margin-right: auto;" class="fade-in-up">Premium PCs & Expert Service Engineered for Perfection.</p>
                                 
@@ -60,7 +124,7 @@ if(count($testimonials) == 0) {
                         </div>
                         <div class="banner-content" style="position: relative; z-index: 2; text-align: center; color: white;">
                             <h1 style="color: white; margin-bottom: 25px;">Need for Intelligence.</h1>
-                            <p style="font-size: 22px; opacity: 0.8; margin-bottom: 45px; font-weight: 300;">Premium PCs & Expert Service in One Place</p>
+                            <p style="font-size: 22px; opacity: 0.8; margin-bottom: 45px; font-weight: 900;">Premium PCs & Expert Service in One Place</p>
                             <a href="products.php" class="btn btn-primary" style="padding: 20px 60px;">Browse Collections</a>
                         </div>
                     </div>
@@ -665,127 +729,7 @@ window.addEventListener("load", function() {
             </div>
         </div>
     </section>
-        <section class="scroll-video">
-             <canvas id="videoCanvas"></canvas>
-        </section>
-
-        <style>
-            .scroll-video {
-                height: 2000vh; /* Further increased height to make the animation significantly slower */
-                position: relative;
-                background: #000;
-                margin-top: -1px; /* Avoid sub-pixel gaps */
-            }
-            #videoCanvas {
-                position: sticky;
-                top: 0;
-                width: 100vw;
-                height: 100vh;
-                display: block;
-                z-index: 5;
-            }
-        </style>
-
-        <script>
-            /**
-             * Scroll-based Image Sequence Animation
-             * Optimized for smooth 60fps-like playback via Canvas
-             */
-            const canvas = document.getElementById('videoCanvas');
-            const context = canvas.getContext('2d');
-            
-            const frameCount = 1521; // Total frames: 1730 - 210 + 1
-            const startFrame = 210;
-            const currentFrame = index => (
-                `assets/images/3d/From Main Klickpin CF- Pinterest Video - 17uulrbeo_${index.toString().padStart(6, '0')}.jpg`
-            );
-
-            const images = [];
-            const videoSequence = {
-                frame: 0
-            };
-
-            // Preload images
-            let loadedCount = 0;
-            function preloadImages() {
-                for (let i = 0; i < frameCount; i++) {
-                    const img = new Image();
-                    img.src = currentFrame(startFrame + i);
-                    img.onload = () => {
-                        loadedCount++;
-                        if (loadedCount === 1) {
-                            // Draw first frame immediately
-                            renderImage(img);
-                        }
-                    };
-                    images.push(img);
-                }
-            }
-
-            function renderImage(img) {
-                if (!img) return;
-                
-                // Canvas sizing
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-
-                // Object-fit: cover logic for Canvas
-                const imgRatio = img.width / img.height;
-                const canvasRatio = canvas.width / canvas.height;
-                
-                let drawWidth, drawHeight, offsetX, offsetY;
-
-                if (canvasRatio > imgRatio) {
-                    drawWidth = canvas.width;
-                    drawHeight = canvas.width / imgRatio;
-                    offsetX = 0;
-                    offsetY = (canvas.height - drawHeight) / 2;
-                } else {
-                    drawWidth = canvas.height * imgRatio;
-                    drawHeight = canvas.height;
-                    offsetX = (canvas.width - drawWidth) / 2;
-                    offsetY = 0;
-                }
-
-                context.clearRect(0, 0, canvas.width, canvas.height);
-                context.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
-            }
-
-            function updateScroll() {
-                const section = document.querySelector('.scroll-video');
-                if (!section) return;
-
-                const sectionRect = section.getBoundingClientRect();
-                const sectionHeight = section.offsetHeight;
-                const viewHeight = window.innerHeight;
-                
-                // Calculate progress within section
-                // Starts when section top hits screen top, ends when section bottom hits screen bottom
-                const progress = Math.max(0, Math.min(1, (-sectionRect.top) / (sectionHeight - viewHeight)));
-                
-                const frameIndex = Math.min(
-                    frameCount - 1,
-                    Math.floor(progress * frameCount)
-                );
-
-                if (images[frameIndex] && images[frameIndex].complete) {
-                    requestAnimationFrame(() => renderImage(images[frameIndex]));
-                }
-            }
-
-            // Initialization
-            preloadImages();
-            window.addEventListener('scroll', updateScroll);
-            window.addEventListener('resize', () => {
-                const section = document.querySelector('.scroll-video');
-                const sectionRect = section.getBoundingClientRect();
-                const sectionHeight = section.offsetHeight;
-                const viewHeight = window.innerHeight;
-                const progress = Math.max(0, Math.min(1, (-sectionRect.top) / (sectionHeight - viewHeight)));
-                const frameIndex = Math.min(frameCount - 1, Math.floor(progress * frameCount));
-                renderImage(images[frameIndex] || images[0]);
-            });
-        </script>
+    
     <!-- Section 7: 📍 Action CTA -->
     <section class="section-padding" style="background: white;">
         <div class="container-wide">

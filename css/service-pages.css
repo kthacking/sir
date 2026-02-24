@@ -1,0 +1,624 @@
+/*
+ * SERVICE PAGES — Shared Minimal Editorial Stylesheet
+ * Used by: chip-repair, enterprise-amc, network-support,
+ *          cleanroom-recovery, pos-integration, cyber-security
+ * ─────────────────────────────────────────────────────────────
+ */
+
+/* ── Hero ─────────────────────────────────────────────────── */
+.service-hero {
+    padding: 148px 24px 72px;
+    background: var(--bg-white);
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Subtle grid overlay inside hero */
+.service-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.035) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+}
+
+/* Faint circular shape */
+.service-hero::after {
+    content: '';
+    position: absolute;
+    top: -120px;
+    right: -120px;
+    width: 480px;
+    height: 480px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    pointer-events: none;
+}
+
+.service-hero .container {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+}
+
+/* Badge */
+.service-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    background: var(--accent-muted);
+    color: var(--accent);
+    border: 1px solid rgba(255, 59, 48, 0.15);
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 20px;
+}
+
+/* Hero title */
+.hero-title {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 800;
+    font-size: clamp(26px, 4vw, 48px);
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: var(--text-dark);
+    margin-bottom: 0;
+    /* Kill old gradient clip */
+    background: none !important;
+    -webkit-background-clip: unset !important;
+    -webkit-text-fill-color: unset !important;
+    background-clip: unset !important;
+}
+
+/* Red accent in title */
+.hero-title .accent {
+    color: var(--accent);
+}
+
+/* Hero subtitle */
+.hero-sub {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text-muted);
+    max-width: 560px;
+    margin: 16px auto 0;
+}
+
+/* ── Page Layout ──────────────────────────────────────────── */
+.details-section {
+    padding: 72px 24px;
+    background: var(--bg);
+}
+
+/* ── Left Info Box  ───────────────────────────────────────── */
+.glass-box {
+    background: var(--bg-white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 40px;
+    box-shadow: none;
+    /* backdrop filter gone */
+    backdrop-filter: none;
+}
+
+/* Info box headings */
+.glass-box h2 {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 800;
+    font-size: clamp(18px, 2.2vw, 26px);
+    letter-spacing: -0.025em;
+    color: var(--text-dark);
+}
+
+.glass-box h4 {
+    font-family: 'Manrope', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+}
+
+.glass-box p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text-mid);
+}
+
+/* ── Feature List ─────────────────────────────────────────── */
+.feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.feature-list li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-dark);
+    padding: 11px 16px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.feature-list li:hover {
+    border-color: #ccc;
+    background: var(--bg-white);
+}
+
+.feature-list li i {
+    color: var(--accent);
+    font-size: 14px;
+    flex-shrink: 0;
+    width: 16px;
+}
+
+/* ── Info Callout (the bottom highlight block) ────────────── */
+.info-callout {
+    margin-top: 24px;
+    padding: 20px 24px;
+    background: var(--bg);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+}
+
+.info-callout h5 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+}
+
+.info-callout p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.65;
+}
+
+/* ── Feature Cards Grid ───────────────────────────────────── */
+.svc-features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.svc-feat-card {
+    background: var(--bg-white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    transition: border-color 0.2s, transform 0.2s;
+}
+
+.svc-feat-card:hover {
+    border-color: #bbb;
+    transform: translateY(-2px);
+}
+
+.svc-feat-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--accent-muted);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+}
+
+.svc-feat-icon i {
+    color: var(--accent);
+    font-size: 15px;
+}
+
+.svc-feat-card h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+.svc-feat-card p {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ── Process Steps ────────────────────────────────────────── */
+.svc-process {
+    padding: 64px 24px;
+    background: var(--bg-white);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+.svc-process .container {
+    max-width: 1100px;
+}
+
+.svc-process-header {
+    margin-bottom: 48px;
+    text-align: center;
+}
+
+.svc-process-header .eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    display: block;
+}
+
+.svc-process-header h2 {
+    font-family: 'Manrope', sans-serif;
+    font-size: clamp(18px, 2.5vw, 28px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--text-dark);
+    margin: 0;
+}
+
+.svc-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0;
+    position: relative;
+}
+
+/* Connector line between steps */
+.svc-steps::before {
+    content: '';
+    position: absolute;
+    top: 22px;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: var(--border);
+    z-index: 0;
+}
+
+.svc-step {
+    position: relative;
+    z-index: 1;
+    padding: 0 16px;
+    text-align: center;
+}
+
+.svc-step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--bg-white);
+    border: 1.5px solid var(--border);
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    font-family: 'Manrope', sans-serif;
+    letter-spacing: 0;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+.svc-step:hover .svc-step-num {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-muted);
+}
+
+.svc-step h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 6px;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+.svc-step p {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ── Request Form ─────────────────────────────────────────── */
+.request-form {
+    background: var(--bg-white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 36px;
+    color: var(--text-dark);
+    /* Strip old dark bg */
+}
+
+.request-form h3 {
+    font-family: 'Manrope', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text-dark);
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+}
+
+.form-control {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text-dark);
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    width: 100%;
+    font-size: 14px;
+    font-family: 'Manrope', 'Inter', sans-serif;
+    transition: border-color 0.2s, background 0.2s;
+    outline: none;
+}
+
+.form-control::placeholder {
+    color: var(--text-light);
+}
+
+.form-control:focus {
+    background: var(--bg-white);
+    border-color: var(--text-dark);
+    box-shadow: none;
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Submit button */
+.btn-submit {
+    background: var(--text-dark);
+    color: #fff;
+    padding: 14px 28px;
+    border-radius: var(--radius-md);
+    border: none;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    font-family: 'Manrope', sans-serif;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.btn-submit:hover {
+    background: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: none;
+}
+
+/* Feedback messages */
+.msg-box {
+    padding: 14px 18px;
+    border-radius: var(--radius-md);
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.msg-success {
+    background: rgba(52, 199, 89, 0.08);
+    color: #1a9c3e;
+    border: 1px solid rgba(52, 199, 89, 0.2);
+}
+
+.msg-error {
+    background: var(--accent-muted);
+    color: var(--accent);
+    border: 1px solid rgba(255, 59, 48, 0.15);
+}
+
+/* ── Pricing Cards (enterprise-amc) ───────────────────────── */
+.pricing-simple {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.price-item {
+    background: var(--bg);
+    padding: 20px;
+    border-radius: var(--radius-md);
+    text-align: center;
+    border: 1px solid var(--border);
+    transition: border-color 0.2s;
+}
+
+.price-item:hover {
+    border-color: #bbb;
+}
+
+.price-item h5 {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+}
+
+.price-item .h3 {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-dark);
+    letter-spacing: -0.03em;
+    font-family: 'Manrope', sans-serif;
+}
+
+.price-item .h3 span {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 400;
+    letter-spacing: 0;
+}
+
+.price-item p.small {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* Featured pricing card */
+.price-item.featured {
+    background: var(--bg-white);
+    border-color: var(--text-dark);
+}
+
+/* ── Dividers ─────────────────────────────────────────────── */
+.section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0;
+}
+
+/* ── Sticky Form (desktop) ────────────────────────────── */
+@media (min-width: 992px) {
+    .col-lg-5>.request-form {
+        position: sticky;
+        top: 108px;
+        max-height: calc(100vh - 120px);
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--border) transparent;
+    }
+
+    .col-lg-5>.request-form::-webkit-scrollbar {
+        width: 3px;
+    }
+
+    .col-lg-5>.request-form::-webkit-scrollbar-thumb {
+        background: var(--border);
+        border-radius: 10px;
+    }
+}
+
+/* ── Feature Section Label ────────────────────────────── */
+.svc-section-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+/* ── Container cap for feature + process sections ─────── */
+.svc-features-grid {
+    margin-top: 0;
+    /* reset, handled by section padding */
+}
+
+/* ── Focus ring on all inputs ─────────────────────────── */
+.form-control:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    border-color: var(--text-dark);
+    box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.06);
+}
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 991px) {
+    .service-hero {
+        padding: 128px 20px 56px;
+    }
+
+    .details-section {
+        padding: 48px 20px;
+    }
+
+    .glass-box {
+        padding: 28px 20px;
+    }
+
+    .request-form {
+        padding: 24px 20px;
+    }
+
+    .svc-process {
+        padding: 48px 20px;
+    }
+
+    .svc-steps::before {
+        display: none;
+    }
+
+    .svc-steps {
+        gap: 16px;
+    }
+
+    .pricing-simple {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .hero-title {
+        font-size: clamp(22px, 7vw, 34px);
+    }
+
+    .hero-sub {
+        font-size: 15px;
+    }
+
+    .svc-features-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 420px) {
+    .svc-features-grid {
+        grid-template-columns: 1fr;
+    }
+}
