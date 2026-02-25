@@ -738,7 +738,7 @@ window.addEventListener("load", function() {
                 <p style="font-size: 22px; max-width: 800px; margin: 0 auto 60px;">Whether it's a high-priority server fix or your first gaming workstation, we are here to help.</p>
                 <div style="display: flex; gap: 24px; justify-content: center; flex-wrap: wrap;">
                     <a href="tel:+919876543210" class="btn btn-outline" style="min-width: 220px;"><i class="fas fa-phone"></i> Call Support</a>
-                    <a href="https://wa.me/1234567890" class="btn btn-outline" style="min-width: 220px; border-color: #25d366; color: #25d366;"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                    <a href="https://wa.me/9944639323" class="btn btn-outline" style="min-width: 220px; border-color: #25d366; color: #25d366;"><i class="fab fa-whatsapp"></i> WhatsApp</a>
                     <a href="get-quote.php" class="btn btn-primary" style="min-width: 220px;">Request Quote <i class="fas fa-file-invoice"></i></a>
                 </div>
             </div>

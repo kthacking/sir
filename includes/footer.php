@@ -69,10 +69,10 @@
 </div>
 
 <!-- WhatsApp Float -->
-<a href="https://wa.me/1234567890" style="position:fixed; bottom:28px; right:28px; background:#25d366; color:white; width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:26px; box-shadow:var(--shadow-lg); z-index:1001; text-decoration:none; transition:transform .3s;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+<a href="https://wa.me/9944639323" style="position:fixed; bottom:28px; right:28px; background:#25d366; color:white; width:52px; height:52px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:26px; box-shadow:var(--shadow-lg); z-index:1001; text-decoration:none; transition:transform .3s;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
     <i class="fab fa-whatsapp"></i>
 </a>
-
+ 
 <!-- Scripts -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>

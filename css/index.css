@@ -7,23 +7,23 @@
 
 /* ── Design Tokens ─────────────────────────────────────────── */
 :root {
-    --accent:        #FF3B30;
-    --accent-muted:  rgba(255, 59, 48, 0.08);
-    --primary:       #FF3B30;
+    --accent: #FF3B30;
+    --accent-muted: rgba(255, 59, 48, 0.08);
+    --primary: #FF3B30;
     --primary-hover: #E0342A;
-    --primary-glow:  rgba(255, 59, 48, 0.18);
+    --primary-glow: rgba(255, 59, 48, 0.18);
 
-    --bg:       #F4F4F4;
+    --bg: #F4F4F4;
     --bg-white: #FFFFFF;
-    --bg-card:  #FAFAFA;
-    --bg-dark:  #111111;
+    --bg-card: #FAFAFA;
+    --bg-dark: #111111;
 
-    --text-dark:  #111111;
-    --text-mid:   #444444;
+    --text-dark: #111111;
+    --text-mid: #444444;
     --text-muted: #888888;
     --text-light: #CCCCCC;
 
-    --border:      #E0E0E0;
+    --border: #E0E0E0;
     --border-dark: #2a2a2a;
 
     --radius-sm: 6px;
@@ -38,24 +38,26 @@
     --ease: cubic-bezier(0.4, 0, 0.2, 1);
 
     /* Legacy compat aliases — do NOT remove */
-    --glass-bg:        rgba(255, 255, 255, 0.80);
-    --glass-border:    rgba(255, 255, 255, 0.3);
-    --shadow-soft:     var(--shadow-md);
-    --shadow-heavy:    var(--shadow-lg);
-    --shadow-glow:     0 8px 24px var(--primary-glow);
+    --glass-bg: rgba(255, 255, 255, 0.80);
+    --glass-border: rgba(255, 255, 255, 0.3);
+    --shadow-soft: var(--shadow-md);
+    --shadow-heavy: var(--shadow-lg);
+    --shadow-glow: 0 8px 24px var(--primary-glow);
     --border-radius-lg: var(--radius-xl);
     --border-radius-md: var(--radius-lg);
-    --transition:      var(--ease);
-    --bg-light:        var(--bg);
-    --text-grey:       var(--text-muted);
-    --apple-blue:      var(--accent);
-    --apple-grey:      var(--text-muted);
-    --apple-dark:      var(--text-dark);
-    --apple-bg:        var(--bg);
+    --transition: var(--ease);
+    --bg-light: var(--bg);
+    --text-grey: var(--text-muted);
+    --apple-blue: var(--accent);
+    --apple-grey: var(--text-muted);
+    --apple-dark: var(--text-dark);
+    --apple-bg: var(--bg);
 }
 
 /* ── Reset ─────────────────────────────────────────────────── */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -90,13 +92,29 @@ main {
 }
 
 /* ── Native Scrollbar (thin, refined) ──────────────────────── */
-::-webkit-scrollbar        { width: 5px; height: 5px; }
-::-webkit-scrollbar-track  { background: transparent; }
-::-webkit-scrollbar-thumb  { background: #ccc; border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+}
 
 /* Firefox */
-* { scrollbar-width: thin; scrollbar-color: #ccc transparent; }
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #ccc transparent;
+}
 
 /* ── Grid Background ──────────────────────────────────────── */
 body::before {
@@ -104,8 +122,8 @@ body::before {
     position: fixed;
     inset: 0;
     background-image:
-        linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+        linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
     background-size: 48px 48px;
     pointer-events: none;
     z-index: 0;
@@ -120,15 +138,18 @@ body::after {
     width: 65vw;
     height: 65vw;
     border-radius: 50%;
-    border: 1px solid rgba(0,0,0,0.04);
+    border: 1px solid rgba(0, 0, 0, 0.04);
     pointer-events: none;
     z-index: 0;
 }
 
 /* All content above bg */
-nav, main, footer,
+nav,
+main,
+footer,
 .custom-scroll-container,
-#ai-chat-btn, #ai-chat-box {
+#ai-chat-btn,
+#ai-chat-box {
     position: relative;
     z-index: 1;
 }
@@ -172,7 +193,9 @@ p {
     color: var(--text-mid);
 }
 
-a { color: inherit; }
+a {
+    color: inherit;
+}
 
 /* ── Section Title (key fix) ───────────────────────────────── */
 .section-title {
@@ -315,7 +338,10 @@ a { color: inherit; }
     transform: translateY(-1px);
 }
 
-.w-100 { width: 100%; justify-content: center; }
+.w-100 {
+    width: 100%;
+    justify-content: center;
+}
 
 /* ── Cards ─────────────────────────────────────────────────── */
 .glass-card {
@@ -346,8 +372,13 @@ a { color: inherit; }
 }
 
 /* ── Text Utilities ────────────────────────────────────────── */
-.gradient-text  { color: var(--text-dark); }
-.accent-text    { color: var(--accent); }
+.gradient-text {
+    color: var(--text-dark);
+}
+
+.accent-text {
+    color: var(--accent);
+}
 
 /* ── Navigation ────────────────────────────────────────────── */
 nav {
@@ -396,13 +427,25 @@ nav.scrolled {
 
 /* ── Animations ────────────────────────────────────────────── */
 @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes ticker-rev {
-    0%   { transform: translateX(-50%); }
-    100% { transform: translateX(0); }
+    0% {
+        transform: translateX(-50%);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
 }
 
 .fade-in-up {
@@ -423,8 +466,10 @@ nav.scrolled {
 .builder-box::before {
     content: '';
     position: absolute;
-    top: -80px; right: -80px;
-    width: 320px; height: 320px;
+    top: -80px;
+    right: -80px;
+    width: 320px;
+    height: 320px;
     background: var(--accent);
     filter: blur(120px);
     opacity: 0.09;
@@ -456,7 +501,7 @@ nav.scrolled {
     transform: translateY(-50%);
     width: 3px;
     height: 140px;
-    background: rgba(0,0,0,0.06);
+    background: rgba(0, 0, 0, 0.06);
     border-radius: 10px;
     z-index: 9999;
     display: flex;
@@ -483,9 +528,18 @@ nav.scrolled {
 }
 
 /* ── Category Cards ────────────────────────────────────────── */
-.category-card .glass-card-pro { position: relative; overflow: hidden; }
-.category-card .cat-img        { transition: transform 0.7s var(--ease); }
-.category-card:hover .cat-img  { transform: scale(1.05); }
+.category-card .glass-card-pro {
+    position: relative;
+    overflow: hidden;
+}
+
+.category-card .cat-img {
+    transition: transform 0.7s var(--ease);
+}
+
+.category-card:hover .cat-img {
+    transform: scale(1.05);
+}
 
 /* ── Stat Items ────────────────────────────────────────────── */
 .stat-item .stat-number {
@@ -505,20 +559,29 @@ footer {
 }
 
 /* ── Form Elements (global) ────────────────────────────────── */
-input, select, textarea {
+input,
+select,
+textarea {
     font-family: 'Manrope', 'Inter', sans-serif;
     font-size: 14px;
 }
 
-input:focus, select:focus, textarea:focus {
+input:focus,
+select:focus,
+textarea:focus {
     outline: none;
     border-color: var(--text-dark) !important;
 }
 
 /* ── Responsive ────────────────────────────────────────────── */
 @media (max-width: 1024px) {
-    .section-padding { padding: 56px 24px; }
-    nav { padding: 0 24px; }
+    .section-padding {
+        padding: 56px 24px;
+    }
+
+    nav {
+        padding: 0 24px;
+    }
 
     .builder-box {
         padding: 56px 36px;
@@ -535,16 +598,32 @@ input:focus, select:focus, textarea:focus {
 }
 
 @media (max-width: 768px) {
-    h1 { font-size: clamp(22px, 7vw, 34px); }
-    h2 { font-size: clamp(18px, 5vw, 26px); }
+    h1 {
+        font-size: clamp(22px, 7vw, 34px);
+    }
 
-    .section-title { font-size: clamp(18px, 5vw, 26px) !important; }
+    h2 {
+        font-size: clamp(18px, 5vw, 26px);
+    }
 
-    .grid-main { grid-template-columns: 1fr; }
-    .nav-links  { display: none; }
+    .section-title {
+        font-size: clamp(18px, 5vw, 26px) !important;
+    }
 
-    .section-padding { padding: 48px 20px; }
+    .grid-main {
+        grid-template-columns: 1fr;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .section-padding {
+        padding: 48px 20px;
+    }
 
     .container,
-    .container-wide { padding-inline: 20px; }
+    .container-wide {
+        padding-inline: 20px;
+    }
 }
