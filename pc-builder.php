@@ -365,26 +365,32 @@ try {
     .scroll-3d-wrap {
         max-width: 1100px;
         margin: 20px auto;
-        height: 150vh; /* Controlled scroll height for animation */
+        height: 400vh; /* Tall scroll zone — 280 frames spread over ~4 viewports for smooth scrubbing */
         position: relative;
-        background: #000;
-        border-radius: var(--radius-xl);
+        background: transparent; /* Invisible container — only a scroll sentinel */
         overflow: visible;
-        border: 1px solid var(--border);
+        /* No border/background here — canvas is the visual element */
     }
     #builder3dCanvas {
+        position: -webkit-sticky;
         position: sticky;
         top: 120px; /* Header offset */
         width: 100%;
-        height: 70vh; /* Limited height to prevent excessive black space */
+        height: 80vh; /* Generous canvas viewport */
         display: block;
         z-index: 1;
         background: #000;
         border-radius: var(--radius-xl);
+        border: 1px solid var(--border);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.25);
     }
     #builder3dLoader {
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 70vh;
+        position: -webkit-sticky;
+        position: sticky;
+        top: 120px; /* Match canvas sticky position */
+        width: 100%;
+        height: 80vh;
+        margin-top: -80vh; /* Pull up to overlay the canvas */
         background: #000;
         display: flex; align-items: center; justify-content: center;
         z-index: 10;
@@ -584,68 +590,215 @@ function addToCart(pid) {
     fetch('cart.php?add=' + pid).then(() => { alert('Added to bag!'); window.location.reload(); });
 }
 
-/* ── 3D Engine ── */
+/* ── 3D Scroll Animation Engine (Apple-style) ── */
 (function() {
     const canvas = document.getElementById('builder3dCanvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     const loader = document.getElementById('builder3dLoader');
-    const FRAME_COUNT = 52;
-    const images = [];
-    let lastIdx = -1;
 
-    const getUrl = i => `assets/images/3d2/Introducing ConceptBook 15： Unleashing Creativity with CGI Forge's 3D Animation_${String(i).padStart(6, '0')}.jpg`;
+    // ── Configuration ──
+    const FRAME_COUNT       = 280;                          // Total frames in sequence
+    const FRAME_PATH        = 'assets/images/3d1/';         // Folder path
+    const FRAME_PREFIX      = 'ezgif-frame-';               // Filename prefix
+    const FRAME_EXT         = '.jpg';                       // File extension
+    const LERP_FACTOR       = 0.08;                         // Smoothing factor (lower = smoother, 0.04–0.12 sweet spot)
+    const PRIORITY_COUNT    = 30;                           // Frames to load first (high priority)
+    const BATCH_SIZE        = 10;                           // Concurrent loads per batch after priority
+    const READY_THRESHOLD   = PRIORITY_COUNT;               // Minimum frames before hiding loader
 
-    function render(img) {
-        if (!img) return;
-        const width = canvas.offsetWidth, height = canvas.offsetHeight;
-        if (width === 0 || height === 0) return;
-        if (canvas.width !== width || canvas.height !== height) { canvas.width = width; canvas.height = height; }
-        
-        // Use "contain" logic to prevent cropping and excessive black space
-        const iR = img.width / img.height, cR = canvas.width / canvas.height;
-        let dW, dH, oX, oY;
-        if (cR > iR) { 
-            dH = canvas.height; dW = canvas.height * iR; 
-            oX = (canvas.width - dW) / 2; oY = 0; 
-        } else { 
-            dW = canvas.width; dH = canvas.width / iR; 
-            oX = 0; oY = (canvas.height - dH) / 2; 
-        }
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, oX, oY, dW, dH);
+    // ── State ──
+    const frames        = new Array(FRAME_COUNT);
+    let loadedCount     = 0;
+    let currentSmooth   = 0;                                // Lerp-interpolated frame position
+    let targetFrame     = 0;                                // Raw scroll-mapped frame index
+    let lastRendered    = -1;                                // Last frame index drawn
+    let rafId           = null;
+    let isActive        = false;
+    let loaderHidden    = false;
+    let canvasW         = 0;
+    let canvasH         = 0;
+
+    // ── Helpers ──
+    function frameSrc(i) {
+        return FRAME_PATH + FRAME_PREFIX + String(i).padStart(3, '0') + FRAME_EXT;
     }
 
-    function update() {
+    function syncCanvasSize() {
+        const w = canvas.offsetWidth  * (window.devicePixelRatio || 1);
+        const h = canvas.offsetHeight * (window.devicePixelRatio || 1);
+        if (canvas.width !== w || canvas.height !== h) {
+            canvas.width  = w;
+            canvas.height = h;
+            canvasW = w;
+            canvasH = h;
+            return true; // size changed
+        }
+        return false;
+    }
+
+    // ── Render a single frame (cover-fit) ──
+    function renderFrame(img) {
+        if (!img || !img.complete || img.naturalWidth === 0) return;
+        syncCanvasSize();
+        if (canvasW === 0 || canvasH === 0) return;
+
+        const imgRatio    = img.naturalWidth / img.naturalHeight;
+        const canvasRatio = canvasW / canvasH;
+        let dw, dh, dx, dy;
+
+        // Cover: fill entire canvas, crop overflow
+        if (canvasRatio > imgRatio) {
+            dw = canvasW;
+            dh = canvasW / imgRatio;
+            dx = 0;
+            dy = (canvasH - dh) / 2;
+        } else {
+            dh = canvasH;
+            dw = canvasH * imgRatio;
+            dx = (canvasW - dw) / 2;
+            dy = 0;
+        }
+
+        ctx.clearRect(0, 0, canvasW, canvasH);
+        ctx.drawImage(img, dx, dy, dw, dh);
+    }
+
+    // ── Scroll → target frame index ──
+    function computeTargetFrame() {
         const section = document.getElementById('3d-section');
-        if (!section || section.style.display === 'none') return;
-        requestAnimationFrame(() => {
-            const wrap = document.querySelector('.scroll-3d-wrap');
-            if (!wrap) return;
-            const rect = wrap.getBoundingClientRect();
-            const scrollable = wrap.offsetHeight - window.innerHeight;
-            const progress = Math.max(0, Math.min(1, -rect.top / (scrollable || 1)));
-            const idx = Math.min(FRAME_COUNT - 1, Math.floor(progress * FRAME_COUNT));
-            if (idx !== lastIdx && images[idx]) { lastIdx = idx; render(images[idx]); }
-            else if (lastIdx === -1 && images[0]) { lastIdx = 0; render(images[0]); }
+        if (!section || section.style.display === 'none') { isActive = false; return; }
+        isActive = true;
+        const wrap = document.querySelector('.scroll-3d-wrap');
+        if (!wrap) return;
+        
+        const rect       = wrap.getBoundingClientRect();
+        const startTop   = 120; // The top offset where sticky begins
+        const scrollable = wrap.offsetHeight - canvas.offsetHeight;
+        
+        if (scrollable <= 0) { targetFrame = 0; return; }
+        
+        // Calculate progress exactly during the sticky period
+        const progress   = Math.max(0, Math.min(1, (startTop - rect.top) / scrollable));
+        targetFrame      = progress * (FRAME_COUNT - 1);
+    }
+
+    // ── Animation Loop (RAF) ──
+    function tick() {
+        rafId = requestAnimationFrame(tick);
+        if (!isActive) return;
+
+        // Lerp toward target
+        currentSmooth += (targetFrame - currentSmooth) * LERP_FACTOR;
+
+        // Snap when very close to avoid jitter
+        if (Math.abs(currentSmooth - targetFrame) < 0.2) currentSmooth = targetFrame;
+
+        const idx = Math.round(Math.max(0, Math.min(FRAME_COUNT - 1, currentSmooth)));
+
+        if (idx !== lastRendered && frames[idx]) {
+            lastRendered = idx;
+            renderFrame(frames[idx]);
+        }
+    }
+
+    // ── Preloader ──
+    function loadImage(index) {
+        return new Promise(resolve => {
+            const img      = new Image();
+            img.decoding   = 'async';
+            img.src        = frameSrc(index + 1); // 1-based filenames
+            img.onload     = () => {
+                frames[index] = img;
+                loadedCount++;
+                onFrameLoaded(index);
+                resolve();
+            };
+            img.onerror    = () => {
+                // Skip broken frames silently
+                loadedCount++;
+                resolve();
+            };
         });
     }
 
-    for (let i = 1; i <= FRAME_COUNT; i++) {
-        const img = new Image();
-        img.src = getUrl(i);
-        img.onload = () => {
-            images[i-1] = img;
-            if (i === 1) render(img);
-            if (images.filter(x => x).length === FRAME_COUNT) {
-                if (loader) { loader.classList.add('hidden'); setTimeout(() => loader.style.display = 'none', 1000); }
+    function onFrameLoaded(index) {
+        // Show first frame immediately to prevent black screen
+        if (index === 0 && lastRendered === -1) {
+            syncCanvasSize();
+            renderFrame(frames[0]);
+            lastRendered = 0;
+        }
+
+        // Hide loader once enough priority frames are loaded
+        if (!loaderHidden && loadedCount >= READY_THRESHOLD) {
+            loaderHidden = true;
+            if (loader) {
+                loader.classList.add('hidden');
+                setTimeout(() => { loader.style.display = 'none'; }, 800);
             }
-        };
+        }
     }
 
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', () => render(images[lastIdx] || images[0]), { passive: true });
-    window.trigger3dUpdate = update;
+    async function preloadAll() {
+        // Phase 1: Load priority frames (first N) concurrently
+        const priorityPromises = [];
+        for (let i = 0; i < Math.min(PRIORITY_COUNT, FRAME_COUNT); i++) {
+            priorityPromises.push(loadImage(i));
+        }
+        await Promise.all(priorityPromises);
+
+        // Phase 2: Load remaining frames in controlled batches
+        const remaining = [];
+        for (let i = PRIORITY_COUNT; i < FRAME_COUNT; i++) {
+            remaining.push(i);
+        }
+
+        for (let b = 0; b < remaining.length; b += BATCH_SIZE) {
+            const batch = remaining.slice(b, b + BATCH_SIZE);
+            await Promise.all(batch.map(i => loadImage(i)));
+        }
+    }
+
+    // ── Resize handling via ResizeObserver ──
+    let resizeObserver = null;
+    if (typeof ResizeObserver !== 'undefined') {
+        resizeObserver = new ResizeObserver(() => {
+            if (syncCanvasSize() && frames[lastRendered >= 0 ? lastRendered : 0]) {
+                renderFrame(frames[lastRendered >= 0 ? lastRendered : 0]);
+            }
+        });
+        resizeObserver.observe(canvas);
+    }
+
+    // Fallback resize for older browsers
+    window.addEventListener('resize', () => {
+        if (syncCanvasSize() && frames[lastRendered >= 0 ? lastRendered : 0]) {
+            renderFrame(frames[lastRendered >= 0 ? lastRendered : 0]);
+        }
+    }, { passive: true });
+
+    // ── Scroll listener ──
+    window.addEventListener('scroll', computeTargetFrame, { passive: true });
+
+    // ── Public trigger for tab switching ──
+    window.trigger3dUpdate = function() {
+        computeTargetFrame();
+        // Force re-render the current frame after tab show
+        syncCanvasSize();
+        const idx = Math.round(Math.max(0, Math.min(FRAME_COUNT - 1, currentSmooth)));
+        if (frames[idx]) renderFrame(frames[idx]);
+        else if (frames[0]) renderFrame(frames[0]);
+    };
+
+    // ── Fill canvas black to prevent flash of white ──
+    syncCanvasSize();
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, canvasW || canvas.width, canvasH || canvas.height);
+
+    // ── Start ──
+    preloadAll();
+    rafId = requestAnimationFrame(tick);
 })();
 </script>
 

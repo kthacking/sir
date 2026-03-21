@@ -67,9 +67,8 @@ html {
     scroll-behavior: smooth;
     scroll-padding-top: 90px;
     font-size: 16px;
-    /* Never hide overflow on html — let native scrollbar work */
-    overflow-x: hidden;
-    overflow-y: auto;
+    /* Use clip instead of hidden so we don't break position: sticky */
+    overflow-x: clip;
 }
 
 body {
@@ -79,9 +78,8 @@ body {
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* FIX: only hide horizontal overflow, always allow vertical scroll */
-    overflow-x: hidden;
-    overflow-y: auto;
+    /* FIX: use clip instead of hidden to prevent breaking position: sticky */
+    overflow-x: clip;
     min-height: 100vh;
 }
 
@@ -434,7 +432,7 @@ nav.scrolled {
 
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: none;
     }
 }
 
